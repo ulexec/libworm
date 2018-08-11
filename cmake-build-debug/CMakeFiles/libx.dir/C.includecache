@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ulexec/Documents/ELF-REsearch/libx/elfx.h
+elf.h
+-
+sys/mman.h
+-
+sys/stat.h
+-
+stdint.h
+-
+fcntl.h
+-
+memory.h
+-
+zconf.h
+-
+stdlib.h
+-
+listx.h
+/home/ulexec/Documents/ELF-REsearch/libx/listx.h
+limits.h
+-
+
+/home/ulexec/Documents/ELF-REsearch/libx/listx.h
+stddef.h
+-
+
+/home/ulexec/Documents/ELF-REsearch/libx/main.c
+stdio.h
+-
+wchar.h
+-
+elfx.h
+/home/ulexec/Documents/ELF-REsearch/libx/elfx.h
+
