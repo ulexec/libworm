@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <wchar.h>
-#include "elfx.h"
+#include "libx.h"
 
 
 int main(int argc, char **argv) {
@@ -21,6 +19,10 @@ int main(int argc, char **argv) {
         printf("%s\n", get_section_name(bin, shdr));
     }
 
+    bin_iter_symbols(iter, bin) {
+        Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
+        printf("%s\n", get_symbol_name(bin, sym));
+    }
     unload_elf(bin);
     return 0;
 }

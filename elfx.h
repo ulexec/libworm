@@ -95,6 +95,7 @@ typedef struct {
     ElfW(Phdr) *dynamic_phdr;
     ElfW(Sym) *symtab;
     ElfW(Sym) *dynsym;
+    Elfx_Sym symbols;
     Elfx_Rel *rel;
     uint8_t *data;
     uint8_t *path;
@@ -115,19 +116,100 @@ uint8_t * get_section_name(Elfx_Bin *bin, Elfx_Shdr *shdr) {
     return &bin->shstrtab[shdr->data->sh_name];
 }
 
+uint8_t * get_symbol_name(Elfx_Bin *bin, Elfx_Sym *sym) {
+    if(!bin->strtab) {
+        return NULL;
+    }
+    return &bin->strtab[sym->data->st_name];
+}
+
 int unload_elf(Elfx_Bin *bin) {
     close(bin->fd);
     free(bin);
     return 0;
 }
 
+void resolve_symbols(Elfx_Bin *bin) {
+    struct list_head *iter;
+    ElfW(Shdr) *shdr;
+
+    shdr = (ElfW(Shdr) *)(bin->data + bin->ehdr->e_shoff);
+
+    bin_iter_shdrs(iter, bin) {
+        Elfx_Shdr *shdr_entry = list_entry(iter, Elfx_Shdr, list);
+        switch (shdr_entry->data->sh_type) {
+            case SHT_SYMTAB:
+                if (!strcmp(get_section_name(bin, shdr_entry), ".symtab")) {
+                    bin->symtab = (ElfW(Sym) *)&bin->data[shdr_entry->data->sh_offset];
+                    bin->nsyms = (int)(shdr_entry->data->sh_size / sizeof(ElfW(Sym)));
+                    ElfW(Shdr) *strtab_shdr = &shdr[shdr_entry->data->sh_link];
+                    bin->strtab = (char *)&bin->data[strtab_shdr->sh_offset];
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    init_list_head (&bin->symbols.list);
+    for (int i = 0; i < bin->nsyms; i++) {
+        Elfx_Sym *sym_entry = (Elfx_Sym *)calloc(1, sizeof(Elfx_Sym));
+        sym_entry->data = &bin->symtab[i];
+        list_add_tail(&sym_entry->list, &bin->symbols.list);
+    }
+}
+
+void resolve_sections(Elfx_Bin *bin) {
+    ElfW(Shdr) *shdr;
+
+    shdr = (ElfW(Shdr) *)(bin->data + bin->ehdr->e_shoff);
+    bin->shstrtab = &bin->data[shdr[bin->ehdr->e_shstrndx].sh_offset];
+
+    init_list_head (&bin->shdrs.list);
+    for (int i = 0; i < bin->ehdr->e_shnum; i++) {
+        Elfx_Shdr *shdr_entry = (Elfx_Shdr *) calloc(1, sizeof(Elfx_Shdr));
+        shdr_entry->data = &shdr[i];
+
+        list_add_tail(&shdr_entry->list, &bin->shdrs.list);
+    }
+}
+
+void resolve_segments(Elfx_Bin *bin) {
+    ElfW(Phdr) *phdr;
+
+    phdr = (ElfW(Shdr) *)(bin->data + bin->ehdr->e_phoff);
+
+    init_list_head (&bin->phdrs.list);
+    for (int i = 0; i < bin->ehdr->e_phnum; i++) {
+        Elfx_Phdr *phdr_entry = (Elfx_Phdr *)calloc(1, sizeof(Elfx_Phdr));
+        phdr_entry->data = &phdr[i];
+        list_add_tail(&phdr_entry->list, &bin->phdrs.list);
+
+        switch (phdr[i].p_type) {
+            case PT_LOAD:
+                if (!phdr[i].p_offset) {
+                    bin->code_phdr = &phdr[i];
+                } else {
+                    bin->data_phdr = &phdr[i];
+                }
+                break;
+            case PT_DYNAMIC:
+                bin->dynamic_phdr = &phdr[i];
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 Elfx_Bin * load_elf(const char *path, int prot, int flags) {
     int fd;
     struct stat st;
     ElfW(Ehdr) *ehdr;
-    ElfW(Phdr) *phdr;
     ElfW(Shdr) *shdr;
     Elfx_Bin *bin;
+    struct list_head *iter;
+
 
     bin = (Elfx_Bin*)calloc(1, sizeof(Elfx_Bin));
     if (!bin) {
@@ -153,56 +235,13 @@ Elfx_Bin * load_elf(const char *path, int prot, int flags) {
 
     bin->path = strdup(path);
     bin->size = (int) st.st_size;
-    bin->ehdr = ehdr = (ElfW(Ehdr) *)bin->data;
-    phdr = (ElfW(Phdr) *)(bin->data + ehdr->e_phoff);
-    shdr = (ElfW(Shdr) *)(bin->data + ehdr->e_shoff);
+    bin->ehdr = (ElfW(Ehdr) *)bin->data;
+    bin->type = bin->ehdr->e_type;
+    bin->entry = bin->ehdr->e_entry;
 
-    init_list_head (&bin->phdrs.list);
-    init_list_head (&bin->shdrs.list);
+    resolve_sections(bin);
+    resolve_segments(bin);
+    resolve_symbols(bin);
 
-    bin->type = ehdr->e_type;
-    bin->entry = ehdr->e_entry;
-    bin->shstrtab = &bin->data[shdr[ehdr->e_shstrndx].sh_offset];
-
-    for (int i = 0; i < ehdr->e_shnum; i++) {
-        Elfx_Shdr *shdr_entry = (Elfx_Shdr*)calloc(1, sizeof(Elfx_Shdr));
-        shdr_entry->data = &shdr[i];
-
-        list_add_tail (&shdr_entry->list, &bin->shdrs.list);
-
-        switch (shdr[i].sh_type) {
-            case SHT_SYMTAB:
-                bin->symtab = (ElfW(Sym)*)&bin->data[shdr[i].sh_offset];
-                bin->nsyms = (int)(shdr[i].sh_size / sizeof(ElfW(Sym)));
-                break;
-            case SHT_STRTAB:
-                bin->strtab = (char *)&bin->data[shdr[i].sh_offset];
-                break;
-            default:
-                break;
-        }
-    }
-
-    for (int i = 0; i < ehdr->e_phnum; i++) {
-        Elfx_Phdr *phdr_entry = (Elfx_Phdr*)calloc(1, sizeof(Elfx_Phdr));
-        phdr_entry->data = &phdr[i];
-        list_add_tail(&phdr_entry->list, &bin->phdrs.list);
-
-        switch (phdr[i].p_type) {
-            case PT_LOAD:
-                if (!phdr[i].p_offset) {
-                    bin->code_phdr = &phdr[i];
-                } else {
-                    bin->data_phdr = &phdr[i];
-                }
-                break;
-            case PT_DYNAMIC:
-                bin->dynamic_phdr = &phdr[i];
-                break;
-            default:
-                break;
-        }
-    }
-    close (fd);
     return bin;
 }

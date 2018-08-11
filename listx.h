@@ -5,9 +5,9 @@
 #ifndef LIBX_LISTX_H
 #define LIBX_LISTX_H
 
-#endif //LIBX_LISTX_H
-
 #include <stddef.h>
+
+#endif //LIBX_LISTX_H
 
 struct list_head {
     struct list_head *next;
@@ -17,6 +17,7 @@ struct list_head {
 #define list_for_each(iter, head) for (iter = (head)->next; iter != (head); iter = iter->next)
 #define bin_iter_phdrs(iter, bin) list_for_each(iter, &bin->phdrs.list)
 #define bin_iter_shdrs(iter, bin) list_for_each(iter, &bin->shdrs.list)
+#define bin_iter_symbols(iter, bin) list_for_each(iter, &bin->symbols.list)
 
 #define list_entry(ptr, type, member) container_of(ptr, type, member)
 #define container_of(ptr, type, member) ({                      \

@@ -3,5 +3,6 @@
 
 CMakeFiles/libx.dir/main.c.o
  /home/ulexec/Documents/ELF-REsearch/libx/elfx.h
+ /home/ulexec/Documents/ELF-REsearch/libx/libx.h
  /home/ulexec/Documents/ELF-REsearch/libx/listx.h
  /home/ulexec/Documents/ELF-REsearch/libx/main.c
