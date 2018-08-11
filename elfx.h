@@ -130,26 +130,6 @@ int unload_elf(Elfx_Bin *bin) {
 }
 
 void resolve_symbols(Elfx_Bin *bin) {
-    struct list_head *iter;
-    ElfW(Shdr) *shdr;
-
-    shdr = (ElfW(Shdr) *)(bin->data + bin->ehdr->e_shoff);
-
-    bin_iter_shdrs(iter, bin) {
-        Elfx_Shdr *shdr_entry = list_entry(iter, Elfx_Shdr, list);
-        switch (shdr_entry->data->sh_type) {
-            case SHT_SYMTAB:
-                if (!strcmp(get_section_name(bin, shdr_entry), ".symtab")) {
-                    bin->symtab = (ElfW(Sym) *)&bin->data[shdr_entry->data->sh_offset];
-                    bin->nsyms = (int)(shdr_entry->data->sh_size / sizeof(ElfW(Sym)));
-                    ElfW(Shdr) *strtab_shdr = &shdr[shdr_entry->data->sh_link];
-                    bin->strtab = (char *)&bin->data[strtab_shdr->sh_offset];
-                }
-                break;
-            default:
-                break;
-        }
-    }
 
     init_list_head (&bin->symbols.list);
     for (int i = 0; i < bin->nsyms; i++) {
@@ -171,6 +151,19 @@ void resolve_sections(Elfx_Bin *bin) {
         shdr_entry->data = &shdr[i];
 
         list_add_tail(&shdr_entry->list, &bin->shdrs.list);
+
+        switch(shdr[i].sh_type) {
+            case SHT_SYMTAB:
+                if (!strcmp(get_section_name(bin, shdr_entry), ".symtab")) {
+                    bin->symtab = (ElfW(Sym) *)&bin->data[shdr_entry->data->sh_offset];
+                    bin->nsyms = (int)(shdr_entry->data->sh_size / sizeof(ElfW(Sym)));
+                    ElfW(Shdr) *strtab_shdr = &shdr[shdr_entry->data->sh_link];
+                    bin->strtab = (char *)&bin->data[strtab_shdr->sh_offset];
+                }
+            break;
+            default:
+                break;
+        }
     }
 }
 
