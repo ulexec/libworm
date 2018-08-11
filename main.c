@@ -18,11 +18,11 @@ int main(int argc, char **argv) {
         Elfx_Shdr *shdr = list_entry(iter, Elfx_Shdr, list);
         printf("%s\n", get_section_name(bin, shdr));
     }
-
     bin_iter_symbols(iter, bin) {
         Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
         printf("%s\n", get_symbol_name(bin, sym));
     }
+
     unload_elf(bin);
     return 0;
 }

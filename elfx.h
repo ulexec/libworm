@@ -152,15 +152,15 @@ void resolve_sections(Elfx_Bin *bin) {
 
         list_add_tail(&shdr_entry->list, &bin->shdrs.list);
 
-        switch(shdr[i].sh_type) {
+        switch (shdr[i].sh_type) {
             case SHT_SYMTAB:
-                if (!strcmp(get_section_name(bin, shdr_entry), ".symtab")) {
+                if (!strcmp (get_section_name(bin, shdr_entry), ".symtab")) {
                     bin->symtab = (ElfW(Sym) *)&bin->data[shdr_entry->data->sh_offset];
                     bin->nsyms = (int)(shdr_entry->data->sh_size / sizeof(ElfW(Sym)));
                     ElfW(Shdr) *strtab_shdr = &shdr[shdr_entry->data->sh_link];
                     bin->strtab = (char *)&bin->data[strtab_shdr->sh_offset];
                 }
-            break;
+                break;
             default:
                 break;
         }
@@ -170,12 +170,13 @@ void resolve_sections(Elfx_Bin *bin) {
 void resolve_segments(Elfx_Bin *bin) {
     ElfW(Phdr) *phdr;
 
-    phdr = (ElfW(Shdr) *)(bin->data + bin->ehdr->e_phoff);
+    phdr = (ElfW(Phdr) *)(bin->data + bin->ehdr->e_phoff);
 
     init_list_head (&bin->phdrs.list);
     for (int i = 0; i < bin->ehdr->e_phnum; i++) {
         Elfx_Phdr *phdr_entry = (Elfx_Phdr *)calloc(1, sizeof(Elfx_Phdr));
         phdr_entry->data = &phdr[i];
+
         list_add_tail(&phdr_entry->list, &bin->phdrs.list);
 
         switch (phdr[i].p_type) {
@@ -198,25 +199,19 @@ void resolve_segments(Elfx_Bin *bin) {
 Elfx_Bin * load_elf(const char *path, int prot, int flags) {
     int fd;
     struct stat st;
-    ElfW(Ehdr) *ehdr;
-    ElfW(Shdr) *shdr;
     Elfx_Bin *bin;
-    struct list_head *iter;
 
-
-    bin = (Elfx_Bin*)calloc(1, sizeof(Elfx_Bin));
+    bin = (Elfx_Bin*)calloc (1, sizeof(Elfx_Bin));
     if (!bin) {
-        perror("calloc");
+        perror ("calloc");
         return NULL;
     }
-
-    if ((fd = open(path, O_RDWR)) < 0) {
-        perror("open");
+    if ((fd = open (path, O_RDWR)) < 0) {
+        perror ("open");
         return NULL;
     }
-
-    if (fstat(fd, &st) < 0) {
-        perror("fstat");
+    if (fstat (fd, &st) < 0) {
+        perror ("fstat");
         return NULL;
     }
 
