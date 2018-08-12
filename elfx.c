@@ -133,15 +133,14 @@ void resolve_dynamic_symbols(Elfx_Bin *bin) {
 void resolve_dynamic(Elfx_Bin *bin) {
     ElfW(Dyn) *dynamic = (ElfW(Dyn) *)&bin->data[bin->dynamic_phdr->p_offset];
 
-    init_list_head((&bin->dynamic_symbols.list));
     for(int i = 0; i < bin->dynamic_num; i++) {
         ElfW(Dyn) *dyn = &dynamic[i];
         switch(dyn->d_tag) {
             case DT_SYMTAB:
-                bin->dynsym = (ElfW(Sym *))&bin->data[addr_to_offset(bin, (uintptr_t *) dyn->d_un.d_ptr)];
+                bin->dynsym = (ElfW(Sym *))&bin->data[addr_to_offset(bin, (uintptr_t)dyn->d_un.d_ptr)];
                 break;
             case DT_STRTAB:
-                bin->dynstr = &bin->data[addr_to_offset(bin, (uintptr_t *) dyn->d_un.d_ptr)];
+                bin->dynstr = &bin->data[addr_to_offset(bin, (uintptr_t)dyn->d_un.d_ptr)];
                 break;
             case DT_STRSZ:
                 bin->dynsym_num = (int) dyn->d_un.d_val;

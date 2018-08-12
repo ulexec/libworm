@@ -38,21 +38,7 @@ listx.h
 limits.h
 -
 
-/home/ulexec/Documents/ELF-REsearch/libx/libx.h
-stdio.h
--
-wchar.h
--
-elfx.h
-/home/ulexec/Documents/ELF-REsearch/libx/elfx.h
-listx.h
-/home/ulexec/Documents/ELF-REsearch/libx/listx.h
-
 /home/ulexec/Documents/ELF-REsearch/libx/listx.h
 stddef.h
 -
-
-/home/ulexec/Documents/ELF-REsearch/libx/main.c
-libx.h
-/home/ulexec/Documents/ELF-REsearch/libx/libx.h
 
