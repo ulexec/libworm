@@ -26,7 +26,7 @@ uint8_t * get_dynamic_symbol_name(Elfx_Bin *bin, Elfx_Sym *sym) {
     }
     return &bin->dynstr[sym->data->st_name];
 }
-int unload_elf(Elfx_Bin *bin) {
+int bin_unload_elf(Elfx_Bin *bin) {
     close(bin->fd);
     free(bin);
     return 0;
@@ -57,11 +57,11 @@ void resolve_sections(Elfx_Bin *bin) {
 
         switch (shdr[i].sh_type) {
             case SHT_SYMTAB:
-                if (!strcmp (get_section_name(bin, shdr_entry), ".symtab")) {
+                if (!strcmp ((const char *) get_section_name(bin, shdr_entry), ".symtab")) {
                     bin->symtab = (ElfW(Sym) *)&bin->data[shdr_entry->data->sh_offset];
                     bin->sym_num = (int)(shdr_entry->data->sh_size / sizeof(ElfW(Sym)));
                     ElfW(Shdr) *strtab_shdr = &shdr[shdr_entry->data->sh_link];
-                    bin->strtab = (char *)&bin->data[strtab_shdr->sh_offset];
+                    bin->strtab = &bin->data[strtab_shdr->sh_offset];
                 }
                 break;
             default:
@@ -86,7 +86,7 @@ void resolve_segments(Elfx_Bin *bin) {
             case PT_LOAD:
                 if (!phdr[i].p_offset) {
                     bin->code_phdr = &phdr[i];
-                    bin->image_base = phdr[i].p_vaddr;
+                    bin->image_base = (uint32_t) phdr[i].p_vaddr;
                 } else {
                     bin->data_phdr = &phdr[i];
                 }
@@ -131,22 +131,28 @@ void resolve_dynamic_symbols(Elfx_Bin *bin) {
 }
 
 void resolve_dynamic(Elfx_Bin *bin) {
-    ElfW(Dyn) *dynamic = (ElfW(Dyn) *)&bin->data[bin->dynamic_phdr->p_offset];
+    ElfW(Dyn) *dynamic, *entry;
+    dynamic = (ElfW(Dyn) *)&bin->data[bin->dynamic_phdr->p_offset];
+    init_list_head(&bin->dynamic.list);
 
     for(int i = 0; i < bin->dynamic_num; i++) {
-        ElfW(Dyn) *dyn = &dynamic[i];
-        switch(dyn->d_tag) {
+        Elfx_Dyn *dyn_node = (Elfx_Dyn *)calloc (1, sizeof(Elfx_Dyn));
+        entry = &dynamic[i];
+        dyn_node->data = entry;
+        list_add_tail(&dyn_node->list, &bin->dynamic.list);
+
+        switch(entry->d_tag) {
             case DT_SYMTAB:
-                bin->dynsym = (ElfW(Sym *))&bin->data[addr_to_offset(bin, (uintptr_t)dyn->d_un.d_ptr)];
+                bin->dynsym = (ElfW(Sym *))&bin->data[addr_to_offset(bin, (uintptr_t)entry->d_un.d_ptr)];
                 break;
             case DT_STRTAB:
-                bin->dynstr = &bin->data[addr_to_offset(bin, (uintptr_t)dyn->d_un.d_ptr)];
+                bin->dynstr = &bin->data[addr_to_offset(bin, (uintptr_t)entry->d_un.d_ptr)];
                 break;
             case DT_STRSZ:
-                bin->dynsym_num = (int) dyn->d_un.d_val;
+                bin->dynsym_num = (int) entry->d_un.d_val;
                 break;
             case DT_SYMENT:
-                bin->dynsym_num /= dyn->d_un.d_val;
+                bin->dynsym_num /= entry->d_un.d_val;
                 break;
             default:
                 break;
@@ -155,7 +161,7 @@ void resolve_dynamic(Elfx_Bin *bin) {
     resolve_dynamic_symbols(bin);
 }
 
-Elfx_Bin * load_elf(const char *path, int prot, int flags) {
+Elfx_Bin * bin_load_elf(const char *path, int prot, int flags) {
     int fd;
     struct stat st;
     Elfx_Bin *bin;

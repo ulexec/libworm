@@ -57,6 +57,7 @@
 #define PAGE_ALIGN_UP(x) (PAGE_ALIGN(x) + PAGE_SIZE)
 #define bin_iter_phdrs(iter, bin) list_for_each(iter, &bin->phdrs.list)
 #define bin_iter_shdrs(iter, bin) list_for_each(iter, &bin->shdrs.list)
+#define bin_iter_dynamic(iter, bin) list_for_each(iter, &bin->dynamic.list)
 #define bin_iter_symbols(iter, bin) list_for_each(iter, &bin->symbols.list)
 #define bin_iter_dynamic_symbols(iter, bin) list_for_each(iter, &bin->dynamic_symbols.list)
 
@@ -98,6 +99,7 @@ typedef struct {
     ElfW(Phdr) *code_phdr;
     ElfW(Phdr) *data_phdr;
     ElfW(Phdr) *dynamic_phdr;
+    Elfx_Dyn dynamic;
     ElfW(Sym) *symtab;
     ElfW(Sym) *dynsym;
     Elfx_Sym symbols;
@@ -124,12 +126,12 @@ uint8_t * get_dynamic_symbol_name(Elfx_Bin *, Elfx_Sym *);
 int segment_rva_to_offset_diff(Elfx_Bin *, Elfx_Phdr *);
 int addr_to_offset(Elfx_Bin *, Elf64_Addr);
 int addr_to_rva(Elfx_Bin *, uintptr_t);
-int unload_elf(Elfx_Bin *);
+int bin_unload_elf(Elfx_Bin *);
 void resolve_dynamic(Elfx_Bin *);
 void resolve_symbols(Elfx_Bin *);
 void resolve_dynamic_symbols(Elfx_Bin *);
 void resolve_sections(Elfx_Bin *);
-Elfx_Bin * load_elf(const char *, int, int);
+Elfx_Bin * bin_load_elf(const char *, int, int);
 void resolve_segments(Elfx_Bin *);
 
 #endif //LIBX_ELFX_H

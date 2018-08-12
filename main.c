@@ -1,11 +1,12 @@
+#include <elf.h>
 #include "libx.h"
 
 int main(int argc, char **argv) {
     Elfx_Bin *bin;
     struct list_head *iter;
 
-    if (!(bin = load_elf("/home/ulexec/ls", PROT_READ | PROT_WRITE, MAP_PRIVATE))) {
-        fprintf(stderr, "load_elf failed");
+    if (!(bin = bin_load_elf("/home/ulexec/ls", PROT_READ | PROT_WRITE, MAP_PRIVATE))) {
+        fprintf(stderr, "bin_load_elf failed");
         return -1;
     }
 
@@ -25,6 +26,10 @@ int main(int argc, char **argv) {
         Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
         printf("%s\n", get_dynamic_symbol_name(bin, sym));
     }
-    unload_elf(bin);
+    bin_iter_dynamic(iter, bin) {
+        Elfx_Dyn *dyn = list_entry(iter, Elfx_Dyn, list);
+        printf("0x%lx\n", dyn->data->d_un.d_ptr);
+    }
+    bin_unload_elf(bin);
     return 0;
 }
