@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <wchar.h>
 #include "elfx.h"
+#include "listx.h"
 
 #endif //LIBX_LIBX_H
 

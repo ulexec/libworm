@@ -81,10 +81,16 @@
 		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/libx.h">
 			<Option target="libx"/>
 		</Unit>
+		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/elfx.c">
+			<Option target="libx"/>
+		</Unit>
 		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/elfx.h">
 			<Option target="libx"/>
 		</Unit>
 		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/libx.h">
+			<Option target="libx"/>
+		</Unit>
+		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/listx.c">
 			<Option target="libx"/>
 		</Unit>
 		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/listx.h">

@@ -1,6 +1,5 @@
 #include "libx.h"
 
-
 int main(int argc, char **argv) {
     Elfx_Bin *bin;
     struct list_head *iter;

@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/libx.dir/main.c.o"
+  "CMakeFiles/libx.dir/elfx.c.o"
+  "CMakeFiles/libx.dir/listx.c.o"
   "libx.pdb"
   "libx"
 )

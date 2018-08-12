@@ -123,6 +123,60 @@ libx/fast:
 	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/build
 .PHONY : libx/fast
 
+elfx.o: elfx.c.o
+
+.PHONY : elfx.o
+
+# target to build an object file
+elfx.c.o:
+	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/elfx.c.o
+.PHONY : elfx.c.o
+
+elfx.i: elfx.c.i
+
+.PHONY : elfx.i
+
+# target to preprocess a source file
+elfx.c.i:
+	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/elfx.c.i
+.PHONY : elfx.c.i
+
+elfx.s: elfx.c.s
+
+.PHONY : elfx.s
+
+# target to generate assembly for a file
+elfx.c.s:
+	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/elfx.c.s
+.PHONY : elfx.c.s
+
+listx.o: listx.c.o
+
+.PHONY : listx.o
+
+# target to build an object file
+listx.c.o:
+	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/listx.c.o
+.PHONY : listx.c.o
+
+listx.i: listx.c.i
+
+.PHONY : listx.i
+
+# target to preprocess a source file
+listx.c.i:
+	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/listx.c.i
+.PHONY : listx.c.i
+
+listx.s: listx.c.s
+
+.PHONY : listx.s
+
+# target to generate assembly for a file
+listx.c.s:
+	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/listx.c.s
+.PHONY : listx.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -159,6 +213,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... libx"
+	@echo "... elfx.o"
+	@echo "... elfx.i"
+	@echo "... elfx.s"
+	@echo "... listx.o"
+	@echo "... listx.i"
+	@echo "... listx.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

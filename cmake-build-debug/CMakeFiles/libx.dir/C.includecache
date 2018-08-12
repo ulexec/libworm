@@ -23,6 +23,8 @@ zconf.h
 -
 stdlib.h
 -
+stdio.h
+-
 listx.h
 /home/ulexec/Documents/ELF-REsearch/libx/listx.h
 limits.h
@@ -35,6 +37,8 @@ wchar.h
 -
 elfx.h
 /home/ulexec/Documents/ELF-REsearch/libx/elfx.h
+listx.h
+/home/ulexec/Documents/ELF-REsearch/libx/listx.h
 
 /home/ulexec/Documents/ELF-REsearch/libx/listx.h
 stddef.h
