@@ -15,10 +15,6 @@ struct list_head {
 };
 
 #define list_for_each(iter, head) for (iter = (head)->next; iter != (head); iter = iter->next)
-#define bin_iter_phdrs(iter, bin) list_for_each(iter, &bin->phdrs.list)
-#define bin_iter_shdrs(iter, bin) list_for_each(iter, &bin->shdrs.list)
-#define bin_iter_symbols(iter, bin) list_for_each(iter, &bin->symbols.list)
-
 #define list_entry(ptr, type, member) container_of(ptr, type, member)
 #define container_of(ptr, type, member) ({                      \
         const typeof( ((type *)0)->member ) *__mptr = (ptr);    \

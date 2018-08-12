@@ -54,6 +54,9 @@
 #define PAGE_SIZE 0x1000
 #define PAGE_ALIGN(x) (x & ~(PAGE_SIZE - 1))
 #define PAGE_ALIGN_UP(x) (PAGE_ALIGN(x) + PAGE_SIZE)
+#define bin_iter_phdrs(iter, bin) list_for_each(iter, &bin->phdrs.list)
+#define bin_iter_shdrs(iter, bin) list_for_each(iter, &bin->shdrs.list)
+#define bin_iter_symbols(iter, bin) list_for_each(iter, &bin->symbols.list)
 
 typedef struct {
     struct list_head list;
@@ -104,8 +107,8 @@ typedef struct {
     int fd;
     int size;
     int type;
-    int nsyms;
-    int ndsyms;
+    int symnum;
+    int dynnum;
     uintptr_t entry;
 } Elfx_Bin;
 
@@ -132,7 +135,7 @@ int unload_elf(Elfx_Bin *bin) {
 void resolve_symbols(Elfx_Bin *bin) {
 
     init_list_head (&bin->symbols.list);
-    for (int i = 0; i < bin->nsyms; i++) {
+    for (int i = 0; i < bin->symnum; i++) {
         Elfx_Sym *sym_entry = (Elfx_Sym *)calloc(1, sizeof(Elfx_Sym));
         sym_entry->data = &bin->symtab[i];
         list_add_tail(&sym_entry->list, &bin->symbols.list);
@@ -156,7 +159,7 @@ void resolve_sections(Elfx_Bin *bin) {
             case SHT_SYMTAB:
                 if (!strcmp (get_section_name(bin, shdr_entry), ".symtab")) {
                     bin->symtab = (ElfW(Sym) *)&bin->data[shdr_entry->data->sh_offset];
-                    bin->nsyms = (int)(shdr_entry->data->sh_size / sizeof(ElfW(Sym)));
+                    bin->symnum = (int)(shdr_entry->data->sh_size / sizeof(ElfW(Sym)));
                     ElfW(Shdr) *strtab_shdr = &shdr[shdr_entry->data->sh_link];
                     bin->strtab = (char *)&bin->data[strtab_shdr->sh_offset];
                 }
