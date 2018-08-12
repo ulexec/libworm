@@ -113,7 +113,7 @@ int addr_to_offset(Elfx_Bin *bin, uintptr_t addr) {
     struct list_head *iter;
     bin_iter_phdrs(iter, bin) {
         Elfx_Phdr *phdr = list_entry(iter, Elfx_Phdr, list);
-        if (phdr->data->p_vaddr + phdr->data->p_filesz <= addr >= (uintptr_t *) phdr->data->p_vaddr) {
+        if ((uintptr_t) phdr->data->p_vaddr <= addr <= phdr->data->p_vaddr + phdr->data->p_filesz ) {
                 return addr_to_rva(bin, addr) + segment_rva_to_offset_diff(bin, phdr);
         }
     }
