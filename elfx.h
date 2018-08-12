@@ -58,6 +58,7 @@
 #define bin_iter_phdrs(iter, bin) list_for_each(iter, &bin->phdrs.list)
 #define bin_iter_shdrs(iter, bin) list_for_each(iter, &bin->shdrs.list)
 #define bin_iter_symbols(iter, bin) list_for_each(iter, &bin->symbols.list)
+#define bin_iter_dynamic_symbols(iter, bin) list_for_each(iter, &bin->dynamic_symbols.list)
 
 typedef struct {
     struct list_head list;
@@ -100,25 +101,35 @@ typedef struct {
     ElfW(Sym) *symtab;
     ElfW(Sym) *dynsym;
     Elfx_Sym symbols;
+    Elfx_Sym dynamic_symbols;
     Elfx_Rel *rel;
     uint8_t *data;
     uint8_t *path;
     uint8_t *shstrtab;
     uint8_t *strtab;
+    uint8_t *dynstr;
+    uint32_t image_base;
     int fd;
     int size;
     int type;
-    int symnum;
-    int dynnum;
+    int sym_num;
+    int dynamic_num;
+    int dynsym_num;
     uintptr_t entry;
 } Elfx_Bin;
 
-extern uint8_t * get_section_name(Elfx_Bin *, Elfx_Shdr *);
-extern uint8_t * get_symbol_name(Elfx_Bin *, Elfx_Sym *);
-extern int unload_elf(Elfx_Bin *);
-extern void resolve_symbols(Elfx_Bin *);
-extern void resolve_sections(Elfx_Bin *);
-extern Elfx_Bin * load_elf(const char *, int, int);
-extern void resolve_segments(Elfx_Bin *);
+uint8_t * get_section_name(Elfx_Bin *, Elfx_Shdr *);
+uint8_t * get_symbol_name(Elfx_Bin *, Elfx_Sym *);
+uint8_t * get_dynamic_symbol_name(Elfx_Bin *, Elfx_Sym *);
+int segment_rva_to_offset_diff(Elfx_Bin *, Elfx_Phdr *);
+int addr_to_offset(Elfx_Bin *, Elf64_Addr);
+int addr_to_rva(Elfx_Bin *, uintptr_t);
+int unload_elf(Elfx_Bin *);
+void resolve_dynamic(Elfx_Bin *);
+void resolve_symbols(Elfx_Bin *);
+void resolve_dynamic_symbols(Elfx_Bin *);
+void resolve_sections(Elfx_Bin *);
+Elfx_Bin * load_elf(const char *, int, int);
+void resolve_segments(Elfx_Bin *);
 
 #endif //LIBX_ELFX_H

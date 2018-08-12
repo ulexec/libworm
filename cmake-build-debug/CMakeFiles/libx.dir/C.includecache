@@ -6,6 +6,14 @@
 
 #IncludeRegexTransform: 
 
+/home/ulexec/Documents/ELF-REsearch/libx/elfx.c
+elf.h
+-
+elfx.h
+/home/ulexec/Documents/ELF-REsearch/libx/elfx.h
+listx.h
+/home/ulexec/Documents/ELF-REsearch/libx/listx.h
+
 /home/ulexec/Documents/ELF-REsearch/libx/elfx.h
 elf.h
 -

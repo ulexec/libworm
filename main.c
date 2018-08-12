@@ -4,7 +4,7 @@ int main(int argc, char **argv) {
     Elfx_Bin *bin;
     struct list_head *iter;
 
-    if (!(bin = load_elf("/home/ulexec/a.out", PROT_READ | PROT_WRITE, MAP_PRIVATE))) {
+    if (!(bin = load_elf("/home/ulexec/ls", PROT_READ | PROT_WRITE, MAP_PRIVATE))) {
         fprintf(stderr, "load_elf failed");
         return -1;
     }
@@ -21,7 +21,10 @@ int main(int argc, char **argv) {
         Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
         printf("%s\n", get_symbol_name(bin, sym));
     }
-
+    bin_iter_dynamic_symbols(iter, bin) {
+        Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
+        printf("%s\n", get_dynamic_symbol_name(bin, sym));
+    }
     unload_elf(bin);
     return 0;
 }
