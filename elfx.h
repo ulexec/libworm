@@ -50,16 +50,20 @@
 /* GNU header uses `JUMP_SLOT' while `JMP_SLOT' in FreeBSD. */
 #define R_X86_64_JUMP_SLOT  R_X86_64_JMP_SLOT
 
-
-
 #define PAGE_SIZE 0x1000
 #define PAGE_ALIGN(x) (x & ~(PAGE_SIZE - 1))
 #define PAGE_ALIGN_UP(x) (PAGE_ALIGN(x) + PAGE_SIZE)
+
 #define bin_iter_phdrs(iter, bin) list_for_each(iter, &bin->phdrs.list)
+#define bin_iter_phdrs_reverse(iter, bin) list_for_each_reverse(iter, &bin->phdrs.list)
 #define bin_iter_shdrs(iter, bin) list_for_each(iter, &bin->shdrs.list)
+#define bin_iter_shdrs_reverse(iter, bin) list_for_each_reverse(iter, &bin->shdrs.list)
 #define bin_iter_dynamic(iter, bin) list_for_each(iter, &bin->dynamic.list)
+#define bin_iter_dynamic_reverse(iter, bin) list_for_each_reverse(iter, &bin->dynamic.list)
 #define bin_iter_symbols(iter, bin) list_for_each(iter, &bin->symbols.list)
+#define bin_iter_symbols_reverse(iter, bin) list_for_each_reverse(iter, &bin->symbols.list)
 #define bin_iter_dynamic_symbols(iter, bin) list_for_each(iter, &bin->dynamic_symbols.list)
+#define bin_iter_dynamic_symbols_reverse(iter, bin) list_for_each_reverse(iter, &bin->dynamic_symbols.list)
 
 typedef struct {
     struct list_head list;
@@ -123,15 +127,15 @@ typedef struct {
 uint8_t * get_section_name(Elfx_Bin *, Elfx_Shdr *);
 uint8_t * get_symbol_name(Elfx_Bin *, Elfx_Sym *);
 uint8_t * get_dynamic_symbol_name(Elfx_Bin *, Elfx_Sym *);
-int segment_rva_to_offset_diff(Elfx_Bin *, Elfx_Phdr *);
-int addr_to_offset(Elfx_Bin *, Elf64_Addr);
-int addr_to_rva(Elfx_Bin *, uintptr_t);
-int bin_unload_elf(Elfx_Bin *);
 void resolve_dynamic(Elfx_Bin *);
 void resolve_symbols(Elfx_Bin *);
 void resolve_dynamic_symbols(Elfx_Bin *);
 void resolve_sections(Elfx_Bin *);
-Elfx_Bin * bin_load_elf(const char *, int, int);
 void resolve_segments(Elfx_Bin *);
+Elfx_Bin * bin_load_elf(const char *, int, int);
+int bin_unload_elf(Elfx_Bin *);
+int segment_rva_to_offset_diff(Elfx_Bin *, Elfx_Phdr *);
+int addr_to_offset(Elfx_Bin *, Elf64_Addr);
+int addr_to_rva(Elfx_Bin *, uintptr_t);
 
 #endif //LIBX_ELFX_H

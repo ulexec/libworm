@@ -8,7 +8,9 @@
 #include <stddef.h>
 
 #define list_for_each(iter, head) for (iter = (head)->next; iter != (head); iter = iter->next)
+#define list_for_each_reverse(iter, head) for (iter = (head)->prev; iter != (head); iter = iter->prev)
 #define list_entry(ptr, type, member) container_of(ptr, type, member)
+#define list_last_entry(ptr, type, member) list_entry((ptr)->prev, type, member)
 #define container_of(ptr, type, member) ({                      \
         const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
         (type *)( (char *)__mptr - offsetof(type,member) );})
@@ -25,5 +27,6 @@ void __list_del(struct list_head *, struct list_head *);
 void list_del(struct list_head *);
 void list_add(struct list_head *, struct list_head *);
 void list_add_tail(struct list_head *, struct list_head *);
+int list_empty(const struct list_head *);
 
 #endif //LIBX_LISTX_H

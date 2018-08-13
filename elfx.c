@@ -26,7 +26,36 @@ uint8_t * get_dynamic_symbol_name(Elfx_Bin *bin, Elfx_Sym *sym) {
     }
     return &bin->dynstr[sym->data->st_name];
 }
+
 int bin_unload_elf(Elfx_Bin *bin) {
+    struct list_head *iter;
+
+    bin_iter_shdrs_reverse(iter, bin) {
+        Elfx_Shdr *shdr = list_entry(iter, Elfx_Shdr, list);
+        list_del(&shdr->list);
+        free(shdr);
+    }
+    bin_iter_phdrs_reverse(iter, bin) {
+        Elfx_Phdr *phdr = list_entry(iter, Elfx_Phdr, list);
+        list_del(&phdr->list);
+        free(phdr);
+    }
+    bin_iter_symbols_reverse(iter, bin) {
+        Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
+        list_del(&sym->list);
+        free(sym);
+    }
+    bin_iter_dynamic_symbols_reverse(iter, bin) {
+        Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
+        list_del(&sym->list);
+        free(sym);
+    }
+    bin_iter_dynamic_reverse(iter, bin) {
+        Elfx_Dyn *dyn = list_entry(iter, Elfx_Dyn, list);
+        list_del(&dyn->list);
+        free(dyn);
+    }
+
     close(bin->fd);
     free(bin);
     return 0;
