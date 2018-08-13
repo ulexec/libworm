@@ -186,7 +186,6 @@ void resolve_dynamic(Elfx_Bin *bin) {
                 break;
         }
     }
-    resolve_dynamic_symbols (bin);
 }
 
 Elfx_Bin * bin_load_elf(const char *path, int prot, int flags) {
@@ -222,7 +221,8 @@ Elfx_Bin * bin_load_elf(const char *path, int prot, int flags) {
 
     resolve_sections (bin);
     resolve_segments (bin);
-    resolve_symbols (bin);
     resolve_dynamic (bin);
+    resolve_symbols (bin);
+    resolve_dynamic_symbols (bin);
     return bin;
 }
