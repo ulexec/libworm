@@ -60,7 +60,11 @@ int bin_unload_elf(Elfx_Bin *bin) {
         list_del (&rel->list);
         free (rel);
     }
-
+    bin_iter_pltgot_reverse(iter, bin) {
+        Elfx_Ptr *ptr = get_list_entry (iter, Elfx_Ptr);
+        list_del (&ptr->list);
+        free (ptr);
+    }
     close (bin->fd);
     free (bin);
     return 0;
@@ -147,8 +151,10 @@ int addr_to_offset(Elfx_Bin *bin, uintptr_t addr) {
 
     bin_iter_phdrs (iter, bin) {
         Elfx_Phdr *phdr = get_list_entry(iter, Elfx_Phdr);
-        if ((uintptr_t) phdr->data->p_vaddr <= addr <= phdr->data->p_vaddr + phdr->data->p_filesz) {
-                return (addr_to_rva (bin, addr) + segment_rva_to_offset_diff (bin, phdr));
+        if(phdr->data->p_type == PT_LOAD) {
+            if ((uintptr_t) phdr->data->p_vaddr <= addr && addr <= phdr->data->p_vaddr + phdr->data->p_filesz) {
+                return (addr_to_rva(bin, addr) + segment_rva_to_offset_diff(bin, phdr));
+            }
         }
     }
     return 0;
@@ -196,22 +202,39 @@ void resolve_dynamic(Elfx_Bin *bin) {
             case DT_RELA:
                 bin->rel = (ElfW(Rel) *)&bin->data[addr_to_offset (bin, (uintptr_t)entry->d_un.d_ptr)];
                 break;
-            case DT_RELASZ:
             case DT_RELSZ:
+            case DT_RELASZ:
                 bin->rel_num += (int)entry->d_un.d_val;
                 break;
             case DT_PLTRELSZ:
                 bin->rel_num += (int)entry->d_un.d_val;
+                bin->pltgot_num = (int)entry->d_un.d_val;
                 break;
-            case DT_RELAENT:
             case DT_RELENT:
+            case DT_RELAENT:
                 bin->rel_num /= (int)entry->d_un.d_val;
+                bin->pltgot_num /= (int)entry->d_un.d_val + PLTGOTLDENT;
+                break;
+            case DT_PLTGOT:
+                bin->pltgot_addr = (int)entry->d_un.d_ptr;
                 break;
             case DT_NULL:
                 return;
             default:
                 break;
         }
+    }
+}
+
+void resolve_pltgot(Elfx_Bin *bin) {
+    PtrW(uint) *got_data = (PtrW(uint) *)&bin->data[addr_to_offset(bin, bin->pltgot_addr)];
+
+    init_list_head(&bin->pltgot.list);
+
+    for (int i = 0; i < bin->pltgot_num; i++) {
+        Elfx_Ptr *ptr = (Elfx_Ptr *)calloc (1, sizeof(Elfx_Ptr));
+        ptr->data = &got_data[i];
+        list_add_tail(&ptr->list, &bin->pltgot.list);
     }
 }
 
@@ -263,5 +286,6 @@ Elfx_Bin * bin_load_elf(const char *path, int prot, int flags) {
     resolve_symbols (bin);
     resolve_dynamic_symbols (bin);
     resolve_relocs (bin);
+    resolve_pltgot(bin);
     return bin;
 }
