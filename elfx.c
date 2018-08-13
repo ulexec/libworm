@@ -139,6 +139,7 @@ int segment_rva_to_offset_diff(Elfx_Bin *bin, Elfx_Phdr *phdr) {
 
 int addr_to_offset(Elfx_Bin *bin, uintptr_t addr) {
     struct list_head *iter;
+
     bin_iter_phdrs (iter, bin) {
         Elfx_Phdr *phdr = get_list_entry(iter, Elfx_Phdr);
         if ((uintptr_t) phdr->data->p_vaddr <= addr <= phdr->data->p_vaddr + phdr->data->p_filesz) {
@@ -149,6 +150,7 @@ int addr_to_offset(Elfx_Bin *bin, uintptr_t addr) {
 }
 
 void resolve_dynamic_symbols(Elfx_Bin *bin) {
+
     init_list_head (&bin->dynamic_symbols.list);
 
     for (int i = 0; i < bin->dynsym_num; i++) {
@@ -160,6 +162,7 @@ void resolve_dynamic_symbols(Elfx_Bin *bin) {
 
 void resolve_dynamic(Elfx_Bin *bin) {
     ElfW(Dyn) *dynamic, *entry;
+
     dynamic = (ElfW(Dyn) *)&bin->data[bin->dynamic_phdr->p_offset];
     init_list_head (&bin->dynamic.list);
 

@@ -27,13 +27,6 @@
 
 #if __ELF_NATIVE_CLASS == 64
 #    define Rel Rela
-#    define RTS_DT_REL    DT_RELA
-#    define RTS_DT_RELSZ  DT_RELASZ
-#    define RTS_DT_RELENT DT_RELAENT
-#else
-#    define RTS_DT_REL    DT_REL
-#    define RTS_DT_RELSZ  DT_RELSZ
-#    define RTS_DT_RELENT DT_RELENT
 #endif
 
 /* We use this macro to refer to ELF types independent of the native wordsize.
