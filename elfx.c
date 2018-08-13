@@ -31,27 +31,27 @@ int bin_unload_elf(Elfx_Bin *bin) {
     struct list_head *iter;
 
     bin_iter_shdrs_reverse(iter, bin) {
-        Elfx_Shdr *shdr = list_entry(iter, Elfx_Shdr, list);
+        Elfx_Shdr *shdr = bin_list_entry(iter, Elfx_Shdr);
         list_del(&shdr->list);
         free(shdr);
     }
     bin_iter_phdrs_reverse(iter, bin) {
-        Elfx_Phdr *phdr = list_entry(iter, Elfx_Phdr, list);
+        Elfx_Phdr *phdr = bin_list_entry(iter, Elfx_Phdr);
         list_del(&phdr->list);
         free(phdr);
     }
     bin_iter_symbols_reverse(iter, bin) {
-        Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
+        Elfx_Sym *sym = bin_list_entry(iter, Elfx_Sym);
         list_del(&sym->list);
         free(sym);
     }
     bin_iter_dynamic_symbols_reverse(iter, bin) {
-        Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
+        Elfx_Sym *sym = bin_list_entry(iter, Elfx_Sym);
         list_del(&sym->list);
         free(sym);
     }
     bin_iter_dynamic_reverse(iter, bin) {
-        Elfx_Dyn *dyn = list_entry(iter, Elfx_Dyn, list);
+        Elfx_Dyn *dyn = bin_list_entry(iter, Elfx_Dyn);
         list_del(&dyn->list);
         free(dyn);
     }
@@ -141,7 +141,7 @@ int segment_rva_to_offset_diff(Elfx_Bin *bin, Elfx_Phdr *phdr) {
 int addr_to_offset(Elfx_Bin *bin, uintptr_t addr) {
     struct list_head *iter;
     bin_iter_phdrs(iter, bin) {
-        Elfx_Phdr *phdr = list_entry(iter, Elfx_Phdr, list);
+        Elfx_Phdr *phdr = bin_list_entry(iter, Elfx_Phdr);
         if ((uintptr_t) phdr->data->p_vaddr <= addr <= phdr->data->p_vaddr + phdr->data->p_filesz ) {
                 return addr_to_rva(bin, addr) + segment_rva_to_offset_diff(bin, phdr);
         }

@@ -11,23 +11,23 @@ int main(int argc, char **argv) {
     }
 
     bin_iter_phdrs(iter, bin) {
-        Elfx_Phdr *phdr = list_entry(iter, Elfx_Phdr, list);
+        Elfx_Phdr *phdr = bin_list_entry(iter, Elfx_Phdr);
         printf("0x%lx\n" , phdr->data->p_paddr);
     }
     bin_iter_shdrs(iter, bin) {
-        Elfx_Shdr *shdr = list_entry(iter, Elfx_Shdr, list);
+        Elfx_Shdr *shdr = bin_list_entry(iter, Elfx_Shdr);
         printf("%s\n", get_section_name(bin, shdr));
     }
     bin_iter_symbols(iter, bin) {
-        Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
+        Elfx_Sym *sym = bin_list_entry(iter, Elfx_Sym);
         printf("%s\n", get_symbol_name(bin, sym));
     }
     bin_iter_dynamic_symbols(iter, bin) {
-        Elfx_Sym *sym = list_entry(iter, Elfx_Sym, list);
+        Elfx_Sym *sym = bin_list_entry(iter, Elfx_Sym);
         printf("%s\n", get_dynamic_symbol_name(bin, sym));
     }
     bin_iter_dynamic(iter, bin) {
-        Elfx_Dyn *dyn = list_entry(iter, Elfx_Dyn, list);
+        Elfx_Dyn *dyn = bin_list_entry(iter, Elfx_Dyn);
         printf("0x%lx\n", dyn->data->d_un.d_ptr);
     }
     bin_unload_elf(bin);

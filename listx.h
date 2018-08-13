@@ -9,8 +9,9 @@
 
 #define list_for_each(iter, head) for (iter = (head)->next; iter != (head); iter = iter->next)
 #define list_for_each_reverse(iter, head) for (iter = (head)->prev; iter != (head); iter = iter->prev)
-#define list_entry(ptr, type, member) container_of(ptr, type, member)
-#define list_last_entry(ptr, type, member) list_entry((ptr)->prev, type, member)
+#define _list_entry(ptr, type, member) container_of(ptr, type, list)
+#define bin_list_entry(ptr, type) _list_entry(ptr, type, list)
+#define bin_list_last_entry(ptr, type, member) bin_list_entry((ptr)->prev, type)
 #define container_of(ptr, type, member) ({                      \
         const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
         (type *)( (char *)__mptr - offsetof(type,member) );})
