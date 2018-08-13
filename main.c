@@ -23,11 +23,11 @@ int main(int argc, char **argv) {
         printf ("%s\n", get_symbol_name (bin, sym));
     }
     bin_iter_dynamic_symbols(iter, bin) {
-        Elfx_Sym *sym = get_list_entry(iter, Elfx_Sym);
+        Elfx_Sym *sym = get_list_entry (iter, Elfx_Sym);
         printf ("%s\n", get_dynamic_symbol_name (bin, sym));
     }
     bin_iter_dynamic(iter, bin) {
-        Elfx_Dyn *dyn = get_list_entry(iter, Elfx_Dyn);
+        Elfx_Dyn *dyn = get_list_entry (iter, Elfx_Dyn);
         printf ("0x%lx\n", dyn->data->d_un.d_ptr);
     }
 
