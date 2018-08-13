@@ -55,6 +55,11 @@ int bin_unload_elf(Elfx_Bin *bin) {
         list_del (&dyn->list);
         free (dyn);
     }
+    bin_iter_relocs_reverse(iter, bin) {
+        Elfx_Rel *rel = get_list_entry (iter, Elfx_Rel);
+        list_del (&rel->list);
+        free (rel);
+    }
 
     close (bin->fd);
     free (bin);
@@ -164,12 +169,14 @@ void resolve_dynamic(Elfx_Bin *bin) {
     ElfW(Dyn) *dynamic, *entry;
 
     dynamic = (ElfW(Dyn) *)&bin->data[bin->dynamic_phdr->p_offset];
-    init_list_head (&bin->dynamic.list);
+    bin->rel_num = 0;
 
-    for (int i = 0; i < bin->dynamic_num; i++) {
+    init_list_head (&bin->dynamic.list);
+    for (int i = 0; ; i++) {
         Elfx_Dyn *dyn_node = (Elfx_Dyn *)calloc (1, sizeof (Elfx_Dyn));
         entry = &dynamic[i];
         dyn_node->data = entry;
+
         list_add_tail (&dyn_node->list, &bin->dynamic.list);
 
         switch (entry->d_tag) {
@@ -185,9 +192,37 @@ void resolve_dynamic(Elfx_Bin *bin) {
             case DT_SYMENT:
                 bin->dynsym_num /= entry->d_un.d_val;
                 break;
+            case DT_REL:
+            case DT_RELA:
+                bin->rel = (ElfW(Rel) *)&bin->data[addr_to_offset (bin, (uintptr_t)entry->d_un.d_ptr)];
+                break;
+            case DT_RELASZ:
+            case DT_RELSZ:
+                bin->rel_num += (int)entry->d_un.d_val;
+                break;
+            case DT_PLTRELSZ:
+                bin->rel_num += (int)entry->d_un.d_val;
+                break;
+            case DT_RELAENT:
+            case DT_RELENT:
+                bin->rel_num /= (int)entry->d_un.d_val;
+                break;
+            case DT_NULL:
+                return;
             default:
                 break;
         }
+    }
+}
+
+void resolve_relocs(Elfx_Bin *bin) {
+
+    init_list_head (&bin->relocs.list);
+
+    for (int i = 0; i < bin->rel_num; i++) {
+        Elfx_Rel *entry = (Elfx_Rel *)calloc (1, sizeof(Elfx_Rel));
+        entry->data = &bin->rel[i];
+        list_add_tail (&entry->list, &bin->relocs.list);
     }
 }
 
@@ -227,5 +262,6 @@ Elfx_Bin * bin_load_elf(const char *path, int prot, int flags) {
     resolve_dynamic (bin);
     resolve_symbols (bin);
     resolve_dynamic_symbols (bin);
+    resolve_relocs (bin);
     return bin;
 }

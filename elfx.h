@@ -57,6 +57,8 @@
 #define bin_iter_symbols_reverse(iter, bin) list_for_each_reverse(iter, &bin->symbols.list)
 #define bin_iter_dynamic_symbols(iter, bin) list_for_each(iter, &bin->dynamic_symbols.list)
 #define bin_iter_dynamic_symbols_reverse(iter, bin) list_for_each_reverse(iter, &bin->dynamic_symbols.list)
+#define bin_iter_relocs(iter, bin) list_for_each(iter, &bin->relocs.list)
+#define bin_iter_relocs_reverse(iter, bin) list_for_each_reverse(iter, &bin->relocs.list)
 
 typedef struct {
     struct list_head list;
@@ -101,7 +103,8 @@ typedef struct {
     ElfW(Sym) *dynsym;
     Elfx_Sym symbols;
     Elfx_Sym dynamic_symbols;
-    Elfx_Rel *rel;
+    Elfx_Rel relocs;
+    ElfW(Rel) *rel;
     uint8_t *data;
     uint8_t *path;
     uint8_t *shstrtab;
@@ -113,6 +116,7 @@ typedef struct {
     int sym_num;
     int dynamic_num;
     int dynsym_num;
+    int rel_num;
     uintptr_t entry;
     uintptr_t image_base;
 } Elfx_Bin;
@@ -126,6 +130,7 @@ void resolve_symbols(Elfx_Bin *);
 void resolve_dynamic_symbols(Elfx_Bin *);
 void resolve_sections(Elfx_Bin *);
 void resolve_segments(Elfx_Bin *);
+void resolve_relocs(Elfx_Bin *);
 int bin_unload_elf(Elfx_Bin *);
 int segment_rva_to_offset_diff(Elfx_Bin *, Elfx_Phdr *);
 int addr_to_offset(Elfx_Bin *, Elf64_Addr);

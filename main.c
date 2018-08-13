@@ -30,6 +30,10 @@ int main(int argc, char **argv) {
         Elfx_Dyn *dyn = get_list_entry (iter, Elfx_Dyn);
         printf ("0x%lx\n", dyn->data->d_un.d_ptr);
     }
+    bin_iter_relocs(iter, bin) {
+        Elfx_Rel *rel = get_list_entry(iter, Elfx_Rel);
+        printf ("0x%lx\n", rel->data->r_offset);
+    }
 
     bin_unload_elf (bin);
     return 0;
