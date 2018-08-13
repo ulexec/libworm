@@ -114,7 +114,6 @@ typedef struct {
     uint8_t *shstrtab;
     uint8_t *strtab;
     uint8_t *dynstr;
-    uint32_t image_base;
     int fd;
     int size;
     int type;
@@ -122,8 +121,10 @@ typedef struct {
     int dynamic_num;
     int dynsym_num;
     uintptr_t entry;
+    uintptr_t image_base;
 } Elfx_Bin;
 
+Elfx_Bin * bin_load_elf(const char *, int, int);
 uint8_t * get_section_name(Elfx_Bin *, Elfx_Shdr *);
 uint8_t * get_symbol_name(Elfx_Bin *, Elfx_Sym *);
 uint8_t * get_dynamic_symbol_name(Elfx_Bin *, Elfx_Sym *);
@@ -132,7 +133,6 @@ void resolve_symbols(Elfx_Bin *);
 void resolve_dynamic_symbols(Elfx_Bin *);
 void resolve_sections(Elfx_Bin *);
 void resolve_segments(Elfx_Bin *);
-Elfx_Bin * bin_load_elf(const char *, int, int);
 int bin_unload_elf(Elfx_Bin *);
 int segment_rva_to_offset_diff(Elfx_Bin *, Elfx_Phdr *);
 int addr_to_offset(Elfx_Bin *, Elf64_Addr);
