@@ -309,7 +309,7 @@ Elfx_Ptr * get_got_entry_from_dynamic_symbol(Elfx_Bin *bin, char *sym_name) {
     return NULL;
 }
 
-int set_symbol_got_value(Elfx_Bin *bin, uint8_t *sym_name, PtrW(uint) value) {
+int set_symbol_got_entry(Elfx_Bin *bin, uint8_t *sym_name, PtrW(uint) value) {
     Elfx_Ptr *got_ent;
     if(!(got_ent = get_got_entry_from_dynamic_symbol(bin, sym_name))) {
         return -1;

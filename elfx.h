@@ -152,7 +152,7 @@ uint8_t * get_section_name(Elfx_Bin *, ElfW(Shdr) *);
 uint8_t * get_symbol_name(Elfx_Bin *, ElfW(Sym) *);
 uint8_t * get_dynamic_symbol_name(Elfx_Bin *, ElfW(Sym) *);
 Elfx_Ptr * get_got_entry_from_dynamic_symbol(Elfx_Bin *, char *);
-int set_symbol_got_value(Elfx_Bin *, uint8_t *, PtrW(uint));
+int set_symbol_got_entry(Elfx_Bin *, uint8_t *, PtrW(uint));
 void resolve_dynamic(Elfx_Bin *);
 void resolve_symbols(Elfx_Bin *);
 void resolve_dynamic_symbols(Elfx_Bin *);

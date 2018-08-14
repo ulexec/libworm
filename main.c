@@ -51,8 +51,8 @@ int main(int argc, char **argv) {
         printf ("0x%lx -->0x%lx\n", plt->addr, *(uint64_t*)plt->bin_ptr);
     }
     /*Overwritting GOT Entry of symbol*/
-    if(set_symbol_got_value(bin, "fwrite", 0x400050)) {
-        fprintf(stderr, "set_symbol_got_value failed");
+    if(set_symbol_got_entry(bin, "fwrite", 0x400050)) {
+        fprintf(stderr, "set_symbol_got_entry failed");
     }
     /*Saving changes to original file*/
     bin_save_elf(bin);
