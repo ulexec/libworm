@@ -18,17 +18,17 @@ int main(int argc, char **argv) {
     /*Iterate through section headers*/
     bin_iter_shdrs(iter, bin) {
         Elfx_Shdr *shdr = get_list_entry (iter, Elfx_Shdr);
-        printf ("%s\n", get_section_name (bin, shdr));
+        printf ("%s\n", get_section_name (bin, shdr->data));
     }
     /*Iterate through symtab symbols*/
     bin_iter_symbols(iter, bin) {
         Elfx_Sym *sym = get_list_entry (iter, Elfx_Sym);
-        printf ("%s\n", get_symbol_name (bin, sym));
+        printf ("%s\n", get_symbol_name (bin, sym->data));
     }
     /*Iterate through dynsym symbols*/
     bin_iter_dynamic_symbols(iter, bin) {
         Elfx_Sym *sym = get_list_entry (iter, Elfx_Sym);
-        printf ("%s\n", get_dynamic_symbol_name (bin, sym));
+        printf ("%s\n", get_dynamic_symbol_name (bin, sym->data));
     }
     /*Iterate through dynamic entries*/
     bin_iter_dynamic(iter, bin) {
@@ -40,11 +40,20 @@ int main(int argc, char **argv) {
         Elfx_Rel *rel = get_list_entry(iter, Elfx_Rel);
         printf ("0x%lx\n", rel->data->r_offset);
     }
-    /*Iterate through .got.plt entries*/
-    bin_iter_pltgot(iter, bin) {
+    /*Iterate through .got.plt section entries*/
+    bin_iter_gotplt(iter, bin) {
         Elfx_Ptr *ptr = get_list_entry(iter, Elfx_Ptr);
         printf ("0x%lx\n", *ptr->data);
     }
+    /*Iterate through .plt section entries*/
+    bin_iter_plt(iter, bin) {
+        Elfx_Plt *plt = get_list_entry(iter, Elfx_Plt);
+        printf ("0x%lx -->0x%lx\n", plt->addr, *(uint64_t*)plt->bin_ptr);
+    }
+    /*Overwritting GOT Entry of symbol*/
+    Elfx_Ptr *close_got = get_got_entry_for_dynamic_symbol(bin, "close");
+    *close_got->data = 0x0000000000001234;
+    bin_save_elf(bin);
 
     bin_unload_elf (bin);
     return 0;

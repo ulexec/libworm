@@ -6,25 +6,25 @@
 #include "elfx.h"
 #include "listx.h"
 
-uint8_t * get_section_name(Elfx_Bin *bin, Elfx_Shdr *shdr) {
+uint8_t * get_section_name(Elfx_Bin *bin, ElfW(Shdr) *shdr) {
     if (!bin->shstrtab) {
         return NULL;
     }
-    return &bin->shstrtab[shdr->data->sh_name];
+    return &bin->shstrtab[shdr->sh_name];
 }
 
-uint8_t * get_symbol_name(Elfx_Bin *bin, Elfx_Sym *sym) {
+uint8_t * get_symbol_name(Elfx_Bin *bin, ElfW(Sym) *sym) {
     if (!bin->strtab) {
         return NULL;
     }
-    return &bin->strtab[sym->data->st_name];
+    return &bin->strtab[sym->st_name];
 }
 
-uint8_t * get_dynamic_symbol_name(Elfx_Bin *bin, Elfx_Sym *sym) {
+uint8_t * get_dynamic_symbol_name(Elfx_Bin *bin, ElfW(Sym) *sym) {
     if (!bin->dynstr) {
         return NULL;
     }
-    return &bin->dynstr[sym->data->st_name];
+    return &bin->dynstr[sym->st_name];
 }
 
 int bin_unload_elf(Elfx_Bin *bin) {
@@ -60,14 +60,23 @@ int bin_unload_elf(Elfx_Bin *bin) {
         list_del (&rel->list);
         free (rel);
     }
-    bin_iter_pltgot_reverse(iter, bin) {
+    bin_iter_gotplt_reverse(iter, bin) {
         Elfx_Ptr *ptr = get_list_entry (iter, Elfx_Ptr);
         list_del (&ptr->list);
         free (ptr);
     }
+    bin_iter_plt_reverse(iter, bin) {
+        Elfx_Plt *plt = get_list_entry(iter, Elfx_Plt);
+        list_del(&plt->list);
+        free(plt);
+    }
     close (bin->fd);
     free (bin);
     return 0;
+}
+
+void bin_save_elf(Elfx_Bin *bin) {
+    write(bin->fd, bin->data, (size_t) bin->size);
 }
 
 void resolve_symbols(Elfx_Bin *bin) {
@@ -94,7 +103,7 @@ void resolve_sections(Elfx_Bin *bin) {
         list_add_tail (&shdr_entry->list, &bin->shdrs.list);
         switch (shdr[i].sh_type) {
             case SHT_SYMTAB:
-                if (!strcmp ((const char *)get_section_name (bin, shdr_entry), ".symtab")) {
+                if (!strcmp ((const char *)get_section_name (bin, shdr_entry->data), ".symtab")) {
                     bin->symtab = (ElfW(Sym) *)&bin->data[shdr_entry->data->sh_offset];
                     bin->sym_num = (int)(shdr_entry->data->sh_size / sizeof (ElfW(Sym)));
                     ElfW(Shdr) *strtab_shdr = &shdr[shdr_entry->data->sh_link];
@@ -204,16 +213,18 @@ void resolve_dynamic(Elfx_Bin *bin) {
                 break;
             case DT_RELSZ:
             case DT_RELASZ:
-                bin->rel_num += (int)entry->d_un.d_val;
+                bin->relocs_num += (int)entry->d_un.d_val;
+                bin->rel_num = (int)entry->d_un.d_val;
                 break;
             case DT_PLTRELSZ:
-                bin->rel_num += (int)entry->d_un.d_val;
+                bin->relocs_num += (int)entry->d_un.d_val;
                 bin->pltgot_num = (int)entry->d_un.d_val;
                 break;
             case DT_RELENT:
             case DT_RELAENT:
                 bin->rel_num /= (int)entry->d_un.d_val;
-                bin->pltgot_num /= (int)entry->d_un.d_val + PLTGOTLDENT;
+                bin->relocs_num /= (int)entry->d_un.d_val;
+                bin->pltgot_num /= (int)entry->d_un.d_val;
                 break;
             case DT_PLTGOT:
                 bin->pltgot_addr = (int)entry->d_un.d_ptr;
@@ -231,10 +242,34 @@ void resolve_pltgot(Elfx_Bin *bin) {
 
     init_list_head(&bin->pltgot.list);
 
-    for (int i = 0; i < bin->pltgot_num; i++) {
+    for (int i = 0; i < bin->pltgot_num + PLTGOTLDENT; i++) {
         Elfx_Ptr *ptr = (Elfx_Ptr *)calloc (1, sizeof(Elfx_Ptr));
         ptr->data = &got_data[i];
         list_add_tail(&ptr->list, &bin->pltgot.list);
+    }
+}
+
+void resolve_plt(Elfx_Bin *bin) {
+    uint8_t *plt_entry;
+    Elfx_Ptr *got_entry;
+    struct list_head *iter;
+    int i = 0;
+
+    bin_iter_gotplt(iter, bin) {
+        got_entry = get_list_entry(iter, Elfx_Ptr);
+        if (i++ == PLTGOTLDENT) {
+            bin->plt_addr = ((*got_entry->data >> 4) << 4) - 0x10;
+            break;
+        }
+    }
+    plt_entry = &bin->data[addr_to_offset(bin, bin->plt_addr)];
+
+    init_list_head(&bin->plt.list);
+    for (i = 0; i <= bin->pltgot_num; i++) {
+        Elfx_Plt *plt = (Elfx_Plt *)calloc (1, sizeof(Elfx_Plt));
+        plt->bin_ptr = ((uint8_t *)plt_entry + i * PLTENT);
+        plt->addr = (PtrW(uint) *)((uint8_t *)bin->plt_addr + i * PLTENT);
+        list_add_tail(&plt->list, &bin->plt.list);
     }
 }
 
@@ -242,11 +277,38 @@ void resolve_relocs(Elfx_Bin *bin) {
 
     init_list_head (&bin->relocs.list);
 
-    for (int i = 0; i < bin->rel_num; i++) {
+    for (int i = 0; i < bin->relocs_num; i++) {
         Elfx_Rel *entry = (Elfx_Rel *)calloc (1, sizeof(Elfx_Rel));
         entry->data = &bin->rel[i];
         list_add_tail (&entry->list, &bin->relocs.list);
     }
+}
+
+Elfx_Ptr * get_got_entry_for_dynamic_symbol(Elfx_Bin *bin, char *sym_name) {
+    struct list_head *iter;
+    Elfx_Rel *rel;
+    ElfW(Sym) *sym;
+    int sym_index, offset, i;
+    sym_index = offset = 0;
+
+    bin_iter_relocs(iter, bin) {
+        rel = get_list_entry(iter, Elfx_Rel);
+        sym_index = __ELF_NATIVE_CLASS == 64 ? ELF64_R_SYM(rel->data->r_info) :  ELF32_R_SYM(rel->data->r_info);
+        sym = &bin->dynsym[sym_index];
+        if (!strncmp(get_dynamic_symbol_name(bin, sym), sym_name, strlen(sym_name))) {
+            break;
+        }
+        offset++;
+    }
+    offset -= bin->rel_num;
+
+    i = 0;
+    bin_iter_gotplt(iter, bin) {
+        if (i++ == offset + PLTGOTLDENT) {
+            return get_list_entry(iter, Elfx_Ptr);
+        }
+    }
+    return NULL;
 }
 
 Elfx_Bin * bin_load_elf(const char *path, int prot, int flags) {
@@ -259,16 +321,16 @@ Elfx_Bin * bin_load_elf(const char *path, int prot, int flags) {
         perror ("calloc");
         return NULL;
     }
-    if ((fd = open (path, O_RDWR)) < 0) {
+    if ((bin->fd = open (path, O_RDWR)) < 0) {
         perror ("open");
         return NULL;
     }
-    if (fstat (fd, &st) < 0) {
+    if (fstat (bin->fd, &st) < 0) {
         perror ("fstat");
         return NULL;
     }
 
-    bin->data = mmap (NULL, (size_t)PAGE_ALIGN_UP (st.st_size), prot, flags, fd, 0);
+    bin->data = mmap (NULL, (size_t)PAGE_ALIGN_UP (st.st_size), prot, flags, bin->fd, 0);
     if (bin->data == MAP_FAILED) {
         perror("mmap");
         return NULL;
@@ -286,6 +348,7 @@ Elfx_Bin * bin_load_elf(const char *path, int prot, int flags) {
     resolve_symbols (bin);
     resolve_dynamic_symbols (bin);
     resolve_relocs (bin);
-    resolve_pltgot(bin);
+    resolve_pltgot (bin);
+    resolve_plt (bin);
     return bin;
 }

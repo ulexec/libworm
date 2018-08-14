@@ -45,6 +45,7 @@
 #define R_X86_64_JUMP_SLOT  R_X86_64_JMP_SLOT
 
 #define PLTGOTLDENT 0x3
+#define PLTENT 0x10
 #define PAGE_SIZE 0x1000
 #define PAGE_ALIGN(x) (x & ~(PAGE_SIZE - 1))
 #define PAGE_ALIGN_UP(x) (PAGE_ALIGN(x) + PAGE_SIZE)
@@ -61,8 +62,10 @@
 #define bin_iter_dynamic_symbols_reverse(iter, bin) list_for_each_reverse(iter, &bin->dynamic_symbols.list)
 #define bin_iter_relocs(iter, bin) list_for_each(iter, &bin->relocs.list)
 #define bin_iter_relocs_reverse(iter, bin) list_for_each_reverse(iter, &bin->relocs.list)
-#define bin_iter_pltgot(iter, bin) list_for_each(iter, &bin->pltgot.list)
-#define bin_iter_pltgot_reverse(iter, bin) list_for_each_reverse(iter, &bin->pltgot.list)
+#define bin_iter_gotplt(iter, bin) list_for_each(iter, &bin->pltgot.list)
+#define bin_iter_gotplt_reverse(iter, bin) list_for_each_reverse(iter, &bin->pltgot.list)
+#define bin_iter_plt(iter, bin) list_for_each(iter, &bin->plt.list)
+#define bin_iter_plt_reverse(iter, bin) list_for_each_reverse(iter, &bin->plt.list)
 
 typedef struct {
     struct list_head list;
@@ -101,6 +104,12 @@ typedef struct {
 
 typedef struct {
     struct list_head list;
+    PtrW(uint) *addr;
+    uint8_t *bin_ptr;
+}Elfx_Plt;
+
+typedef struct {
+    struct list_head list;
     ElfW(Ehdr) *ehdr;
     Elfx_Shdr shdrs;
     Elfx_Phdr phdrs;
@@ -115,6 +124,7 @@ typedef struct {
     Elfx_Rel relocs;
     Elfx_Ptr pltgot;
     Elfx_Ptr got;
+    Elfx_Ptr plt;
     ElfW(Rel) *rel;
     PtrW(uint) pltgot_addr;
     PtrW(uint) plt_addr;
@@ -131,14 +141,17 @@ typedef struct {
     int sym_num;
     int dynamic_num;
     int dynsym_num;
+    int relocs_num;
     int rel_num;
     int pltgot_num;
 } Elfx_Bin;
 
 Elfx_Bin * bin_load_elf(const char *, int, int);
-uint8_t * get_section_name(Elfx_Bin *, Elfx_Shdr *);
-uint8_t * get_symbol_name(Elfx_Bin *, Elfx_Sym *);
-uint8_t * get_dynamic_symbol_name(Elfx_Bin *, Elfx_Sym *);
+void bin_save_elf(Elfx_Bin *);
+uint8_t * get_section_name(Elfx_Bin *, ElfW(Shdr) *);
+uint8_t * get_symbol_name(Elfx_Bin *, ElfW(Sym) *);
+uint8_t * get_dynamic_symbol_name(Elfx_Bin *, ElfW(Sym) *);
+Elfx_Ptr * get_got_entry_for_dynamic_symbol(Elfx_Bin *, char *);
 void resolve_dynamic(Elfx_Bin *);
 void resolve_symbols(Elfx_Bin *);
 void resolve_dynamic_symbols(Elfx_Bin *);
@@ -146,6 +159,7 @@ void resolve_sections(Elfx_Bin *);
 void resolve_segments(Elfx_Bin *);
 void resolve_relocs(Elfx_Bin *);
 void resolve_pltgot(Elfx_Bin *);
+void resolve_plt(Elfx_Bin *bin);
 int bin_unload_elf(Elfx_Bin *);
 int segment_rva_to_offset_diff(Elfx_Bin *, Elfx_Phdr *);
 int addr_to_offset(Elfx_Bin *, Elf64_Addr);
