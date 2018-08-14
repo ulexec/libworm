@@ -51,8 +51,10 @@ int main(int argc, char **argv) {
         printf ("0x%lx -->0x%lx\n", plt->addr, *(uint64_t*)plt->bin_ptr);
     }
     /*Overwritting GOT Entry of symbol*/
-    Elfx_Ptr *close_got = get_got_entry_for_dynamic_symbol(bin, "close");
-    *close_got->data = 0x0000000000001234;
+    if(set_symbol_got_value(bin, "fwrite", 0x400050)) {
+        fprintf(stderr, "set_symbol_got_value failed");
+    }
+    /*Saving changes to original file*/
     bin_save_elf(bin);
 
     bin_unload_elf (bin);

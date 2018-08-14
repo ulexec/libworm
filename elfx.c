@@ -173,7 +173,7 @@ void resolve_dynamic_symbols(Elfx_Bin *bin) {
 
     init_list_head (&bin->dynamic_symbols.list);
 
-    for (int i = 0; i < bin->dynsym_num; i++) {
+    for (int i = 0; i < bin->pltgot_num; i++) {
         Elfx_Sym *sym = (Elfx_Sym *)calloc (1, sizeof(Elfx_Sym));
         sym->data = &bin->dynsym[i];
         list_add_tail (&sym->list, &bin->dynamic_symbols.list);
@@ -203,9 +203,6 @@ void resolve_dynamic(Elfx_Bin *bin) {
                 break;
             case DT_STRSZ:
                 bin->dynsym_num = (int)entry->d_un.d_val;
-                break;
-            case DT_SYMENT:
-                bin->dynsym_num /= entry->d_un.d_val;
                 break;
             case DT_REL:
             case DT_RELA:
@@ -275,27 +272,28 @@ void resolve_plt(Elfx_Bin *bin) {
 
 void resolve_relocs(Elfx_Bin *bin) {
 
-    init_list_head (&bin->relocs.list);
+    init_list_head(&bin->relocs.list);
 
     for (int i = 0; i < bin->relocs_num; i++) {
-        Elfx_Rel *entry = (Elfx_Rel *)calloc (1, sizeof(Elfx_Rel));
+        Elfx_Rel *entry = (Elfx_Rel *) calloc(1, sizeof(Elfx_Rel));
         entry->data = &bin->rel[i];
-        list_add_tail (&entry->list, &bin->relocs.list);
+        list_add_tail(&entry->list, &bin->relocs.list);
     }
 }
 
-Elfx_Ptr * get_got_entry_for_dynamic_symbol(Elfx_Bin *bin, char *sym_name) {
+Elfx_Ptr * get_got_entry_from_dynamic_symbol(Elfx_Bin *bin, char *sym_name) {
     struct list_head *iter;
     Elfx_Rel *rel;
+    uint8_t *dyn_name;
     ElfW(Sym) *sym;
-    int sym_index, offset, i;
-    sym_index = offset = 0;
+    int sym_index=0, offset=0, i;
 
     bin_iter_relocs(iter, bin) {
         rel = get_list_entry(iter, Elfx_Rel);
         sym_index = __ELF_NATIVE_CLASS == 64 ? ELF64_R_SYM(rel->data->r_info) :  ELF32_R_SYM(rel->data->r_info);
         sym = &bin->dynsym[sym_index];
-        if (!strncmp(get_dynamic_symbol_name(bin, sym), sym_name, strlen(sym_name))) {
+        dyn_name = get_dynamic_symbol_name(bin, sym);
+        if (!(strlen(dyn_name) - strlen(sym_name)) && !strncmp(dyn_name, sym_name, strlen(sym_name))) {
             break;
         }
         offset++;
@@ -309,6 +307,15 @@ Elfx_Ptr * get_got_entry_for_dynamic_symbol(Elfx_Bin *bin, char *sym_name) {
         }
     }
     return NULL;
+}
+
+int set_symbol_got_value(Elfx_Bin *bin, uint8_t *sym_name, PtrW(uint) value) {
+    Elfx_Ptr *got_ent;
+    if(!(got_ent = get_got_entry_from_dynamic_symbol(bin, sym_name))) {
+        return -1;
+    }
+    *(PtrW(uint) *)got_ent->data = value;
+    return 0;
 }
 
 Elfx_Bin * bin_load_elf(const char *path, int prot, int flags) {
