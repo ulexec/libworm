@@ -7,11 +7,11 @@
 
 #include <stddef.h>
 
-#define list_for_each(iter, head) for (iter = (head)->next; iter != (head); iter = iter->next)
-#define list_for_each_reverse(iter, head) for (iter = (head)->prev; iter != (head); iter = iter->prev)
+#define LIST_FOR_EACH(iter, head) for (iter = (head)->next; iter != (head); iter = iter->next)
+#define LIST_FOR_EACH_REVERSE(iter, head) for (iter = (head)->prev; iter != (head); iter = iter->prev)
 #define _list_entry(iter, type, member) container_of(iter, type, list)
-#define get_list_entry(iter, type) _list_entry(iter, type, list)
-#define bin_list_last_entry(ptr, type, member) get_list_entry((ptr)->prev, type)
+#define GET_LIST_ENTRY(iter, type) _list_entry(iter, type, list)
+#define bin_list_last_entry(ptr, type, member) GET_LIST_ENTRY((ptr)->prev, type)
 #define container_of(iter, type, member) ({                      \
         const typeof( ((type *)0)->member ) *__mptr = (iter);    \
         (type *)( (char *)__mptr - offsetof(type,member) );})

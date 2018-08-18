@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
   "/home/ulexec/Documents/ELF-REsearch/libx/elfx.c" "/home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles/libx.dir/elfx.c.o"
+  "/home/ulexec/Documents/ELF-REsearch/libx/inject.c" "/home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles/libx.dir/inject.c.o"
   "/home/ulexec/Documents/ELF-REsearch/libx/listx.c" "/home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles/libx.dir/listx.c.o"
   "/home/ulexec/Documents/ELF-REsearch/libx/main.c" "/home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles/libx.dir/main.c.o"
   )

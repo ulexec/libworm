@@ -87,6 +87,12 @@
 		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/elfx.h">
 			<Option target="libx"/>
 		</Unit>
+		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/inject.c">
+			<Option target="libx"/>
+		</Unit>
+		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/inject.h">
+			<Option target="libx"/>
+		</Unit>
 		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libx/libx.h">
 			<Option target="libx"/>
 		</Unit>

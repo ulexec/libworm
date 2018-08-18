@@ -5,6 +5,10 @@ CMakeFiles/libx.dir/elfx.c.o: ../elfx.c
 CMakeFiles/libx.dir/elfx.c.o: ../elfx.h
 CMakeFiles/libx.dir/elfx.c.o: ../listx.h
 
+CMakeFiles/libx.dir/inject.c.o: ../elfx.h
+CMakeFiles/libx.dir/inject.c.o: ../inject.c
+CMakeFiles/libx.dir/inject.c.o: ../listx.h
+
 CMakeFiles/libx.dir/listx.c.o: ../listx.c
 CMakeFiles/libx.dir/listx.c.o: ../listx.h
 

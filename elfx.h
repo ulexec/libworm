@@ -50,22 +50,22 @@
 #define PAGE_ALIGN(x) (x & ~(PAGE_SIZE - 1))
 #define PAGE_ALIGN_UP(x) (PAGE_ALIGN(x) + PAGE_SIZE)
 
-#define bin_iter_phdrs(iter, bin) list_for_each(iter, &bin->phdrs.list)
-#define bin_iter_phdrs_reverse(iter, bin) list_for_each_reverse(iter, &bin->phdrs.list)
-#define bin_iter_shdrs(iter, bin) list_for_each(iter, &bin->shdrs.list)
-#define bin_iter_shdrs_reverse(iter, bin) list_for_each_reverse(iter, &bin->shdrs.list)
-#define bin_iter_dynamic(iter, bin) list_for_each(iter, &bin->dynamic.list)
-#define bin_iter_dynamic_reverse(iter, bin) list_for_each_reverse(iter, &bin->dynamic.list)
-#define bin_iter_symbols(iter, bin) list_for_each(iter, &bin->symbols.list)
-#define bin_iter_symbols_reverse(iter, bin) list_for_each_reverse(iter, &bin->symbols.list)
-#define bin_iter_dynamic_symbols(iter, bin) list_for_each(iter, &bin->dynamic_symbols.list)
-#define bin_iter_dynamic_symbols_reverse(iter, bin) list_for_each_reverse(iter, &bin->dynamic_symbols.list)
-#define bin_iter_relocs(iter, bin) list_for_each(iter, &bin->relocs.list)
-#define bin_iter_relocs_reverse(iter, bin) list_for_each_reverse(iter, &bin->relocs.list)
-#define bin_iter_gotplt(iter, bin) list_for_each(iter, &bin->pltgot.list)
-#define bin_iter_gotplt_reverse(iter, bin) list_for_each_reverse(iter, &bin->pltgot.list)
-#define bin_iter_plt(iter, bin) list_for_each(iter, &bin->plt.list)
-#define bin_iter_plt_reverse(iter, bin) list_for_each_reverse(iter, &bin->plt.list)
+#define BIN_ITER_PHDRS(iter, bin) LIST_FOR_EACH(iter, &bin->phdrs.list)
+#define BIN_ITER_PHDRS_REVERSE(iter, bin) LIST_FOR_EACH_REVERSE(iter, &bin->phdrs.list)
+#define BIN_ITER_SHDRS(iter, bin) LIST_FOR_EACH(iter, &bin->shdrs.list)
+#define BIN_ITER_SHDRS_REVERSE(iter, bin) LIST_FOR_EACH_REVERSE(iter, &bin->shdrs.list)
+#define BIN_ITER_DYNAMIC(iter, bin) LIST_FOR_EACH(iter, &bin->dynamic.list)
+#define BIN_ITER_DYNAMIC_REVERSE(iter, bin) LIST_FOR_EACH_REVERSE(iter, &bin->dynamic.list)
+#define BIN_ITER_SYMBOLS(iter, bin) LIST_FOR_EACH(iter, &bin->symbols.list)
+#define BIN_ITER_SYMBOLS_REVERSE(iter, bin) LIST_FOR_EACH_REVERSE(iter, &bin->symbols.list)
+#define BIN_ITER_DYNAMIC_SYMBOLS(iter, bin) LIST_FOR_EACH(iter, &bin->dynamic_symbols.list)
+#define BIN_ITER_DYNAMIC_SYMBOLS_REVERSE(iter, bin) LIST_FOR_EACH_REVERSE(iter, &bin->dynamic_symbols.list)
+#define BIN_ITER_RELOCS(iter, bin) LIST_FOR_EACH(iter, &bin->relocs.list)
+#define BIN_ITER_RELOCS_REVERSE(iter, bin) LIST_FOR_EACH_REVERSE(iter, &bin->relocs.list)
+#define BIN_ITER_GOTPLT(iter, bin) LIST_FOR_EACH(iter, &bin->pltgot.list)
+#define BIN_ITER_GOTPLT_REVERSE(iter, bin) LIST_FOR_EACH_REVERSE(iter, &bin->pltgot.list)
+#define BIN_ITER_PLT(iter, bin) LIST_FOR_EACH(iter, &bin->plt.list)
+#define BIN_ITER_PLT_REVERSE(iter, bin) LIST_FOR_EACH_REVERSE(iter, &bin->plt.list)
 
 typedef struct {
     struct list_head list;
@@ -164,6 +164,9 @@ void resolve_plt(Elfx_Bin *bin);
 int bin_unload_elf(Elfx_Bin *);
 int segment_rva_to_offset_diff(Elfx_Bin *, Elfx_Phdr *);
 int addr_to_offset(Elfx_Bin *, Elf64_Addr);
+int offset_to_addr(Elfx_Bin *, int);
 int addr_to_rva(Elfx_Bin *, uintptr_t);
+int rva_to_addr(Elfx_Bin *, int);
+
 
 #endif //LIBX_ELFX_H

@@ -30,43 +30,43 @@ uint8_t * get_dynamic_symbol_name(Elfx_Bin *bin, ElfW(Sym) *sym) {
 int bin_unload_elf(Elfx_Bin *bin) {
     struct list_head *iter;
 
-    bin_iter_shdrs_reverse(iter, bin) {
-        Elfx_Shdr *shdr = get_list_entry (iter, Elfx_Shdr);
+    BIN_ITER_SHDRS_REVERSE(iter, bin) {
+        Elfx_Shdr *shdr = GET_LIST_ENTRY (iter, Elfx_Shdr);
         list_del (&shdr->list);
         free (shdr);
     }
-    bin_iter_phdrs_reverse(iter, bin) {
-        Elfx_Phdr *phdr = get_list_entry (iter, Elfx_Phdr);
+    BIN_ITER_PHDRS_REVERSE(iter, bin) {
+        Elfx_Phdr *phdr = GET_LIST_ENTRY (iter, Elfx_Phdr);
         list_del (&phdr->list);
         free (phdr);
     }
-    bin_iter_symbols_reverse(iter, bin) {
-        Elfx_Sym *sym = get_list_entry (iter, Elfx_Sym);
+    BIN_ITER_SYMBOLS_REVERSE(iter, bin) {
+        Elfx_Sym *sym = GET_LIST_ENTRY (iter, Elfx_Sym);
         list_del (&sym->list);
         free (sym);
     }
-    bin_iter_dynamic_symbols_reverse(iter, bin) {
-        Elfx_Sym *sym = get_list_entry (iter, Elfx_Sym);
+    BIN_ITER_DYNAMIC_SYMBOLS_REVERSE(iter, bin) {
+        Elfx_Sym *sym = GET_LIST_ENTRY (iter, Elfx_Sym);
         list_del (&sym->list);
         free (sym);
     }
-    bin_iter_dynamic_reverse(iter, bin) {
-        Elfx_Dyn *dyn = get_list_entry (iter, Elfx_Dyn);
+    BIN_ITER_DYNAMIC_REVERSE(iter, bin) {
+        Elfx_Dyn *dyn = GET_LIST_ENTRY (iter, Elfx_Dyn);
         list_del (&dyn->list);
         free (dyn);
     }
-    bin_iter_relocs_reverse(iter, bin) {
-        Elfx_Rel *rel = get_list_entry (iter, Elfx_Rel);
+    BIN_ITER_RELOCS_REVERSE(iter, bin) {
+        Elfx_Rel *rel = GET_LIST_ENTRY (iter, Elfx_Rel);
         list_del (&rel->list);
         free (rel);
     }
-    bin_iter_gotplt_reverse(iter, bin) {
-        Elfx_Ptr *ptr = get_list_entry (iter, Elfx_Ptr);
+    BIN_ITER_GOTPLT_REVERSE(iter, bin) {
+        Elfx_Ptr *ptr = GET_LIST_ENTRY (iter, Elfx_Ptr);
         list_del (&ptr->list);
         free (ptr);
     }
-    bin_iter_plt_reverse(iter, bin) {
-        Elfx_Plt *plt = get_list_entry(iter, Elfx_Plt);
+    BIN_ITER_PLT_REVERSE(iter, bin) {
+        Elfx_Plt *plt = GET_LIST_ENTRY(iter, Elfx_Plt);
         list_del(&plt->list);
         free(plt);
     }
@@ -151,6 +151,10 @@ int addr_to_rva(Elfx_Bin *bin, uintptr_t addr) {
     return (int)(addr - bin->image_base);
 }
 
+int rva_to_addr(Elfx_Bin *bin, int rva) {
+    return (int)(rva + bin->image_base);
+}
+
 int segment_rva_to_offset_diff(Elfx_Bin *bin, Elfx_Phdr *phdr) {
     return (int)(phdr->data->p_offset - addr_to_rva (bin, phdr->data->p_vaddr));
 }
@@ -158,11 +162,25 @@ int segment_rva_to_offset_diff(Elfx_Bin *bin, Elfx_Phdr *phdr) {
 int addr_to_offset(Elfx_Bin *bin, uintptr_t addr) {
     struct list_head *iter;
 
-    bin_iter_phdrs (iter, bin) {
-        Elfx_Phdr *phdr = get_list_entry(iter, Elfx_Phdr);
+    BIN_ITER_PHDRS (iter, bin) {
+        Elfx_Phdr *phdr = GET_LIST_ENTRY(iter, Elfx_Phdr);
         if(phdr->data->p_type == PT_LOAD) {
             if ((uintptr_t) phdr->data->p_vaddr <= addr && addr <= phdr->data->p_vaddr + phdr->data->p_filesz) {
                 return (addr_to_rva(bin, addr) + segment_rva_to_offset_diff(bin, phdr));
+            }
+        }
+    }
+    return 0;
+}
+
+int offset_to_addr(Elfx_Bin *bin, int offset) {
+    struct list_head *iter;
+
+    BIN_ITER_PHDRS (iter, bin) {
+        Elfx_Phdr *phdr = GET_LIST_ENTRY(iter, Elfx_Phdr);
+        if(phdr->data->p_type == PT_LOAD) {
+            if(phdr->data->p_offset <= offset && offset <= phdr->data->p_offset + phdr->data->p_filesz) {
+                return (offset + (phdr->data->p_vaddr - phdr->data->p_offset));
             }
         }
     }
@@ -252,8 +270,8 @@ void resolve_plt(Elfx_Bin *bin) {
     struct list_head *iter;
     int i = 0;
 
-    bin_iter_gotplt(iter, bin) {
-        got_entry = get_list_entry(iter, Elfx_Ptr);
+    BIN_ITER_GOTPLT(iter, bin) {
+        got_entry = GET_LIST_ENTRY(iter, Elfx_Ptr);
         if (i++ == PLTGOTLDENT) {
             bin->plt_addr = ((*got_entry->data >> 4) << 4) - 0x10;
             break;
@@ -288,8 +306,8 @@ Elfx_Ptr * get_got_entry_from_dynamic_symbol(Elfx_Bin *bin, char *sym_name) {
     ElfW(Sym) *sym;
     int sym_index=0, offset=0, i;
 
-    bin_iter_relocs(iter, bin) {
-        rel = get_list_entry(iter, Elfx_Rel);
+    BIN_ITER_RELOCS(iter, bin) {
+        rel = GET_LIST_ENTRY(iter, Elfx_Rel);
         sym_index = __ELF_NATIVE_CLASS == 64 ? ELF64_R_SYM(rel->data->r_info) :  ELF32_R_SYM(rel->data->r_info);
         sym = &bin->dynsym[sym_index];
         dyn_name = get_dynamic_symbol_name(bin, sym);
@@ -301,9 +319,9 @@ Elfx_Ptr * get_got_entry_from_dynamic_symbol(Elfx_Bin *bin, char *sym_name) {
     offset -= bin->rel_num;
 
     i = 0;
-    bin_iter_gotplt(iter, bin) {
+    BIN_ITER_GOTPLT(iter, bin) {
         if (i++ == offset + PLTGOTLDENT) {
-            return get_list_entry(iter, Elfx_Ptr);
+            return GET_LIST_ENTRY(iter, Elfx_Ptr);
         }
     }
     return NULL;

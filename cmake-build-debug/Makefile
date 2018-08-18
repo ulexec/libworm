@@ -150,6 +150,33 @@ elfx.c.s:
 	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/elfx.c.s
 .PHONY : elfx.c.s
 
+inject.o: inject.c.o
+
+.PHONY : inject.o
+
+# target to build an object file
+inject.c.o:
+	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/inject.c.o
+.PHONY : inject.c.o
+
+inject.i: inject.c.i
+
+.PHONY : inject.i
+
+# target to preprocess a source file
+inject.c.i:
+	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/inject.c.i
+.PHONY : inject.c.i
+
+inject.s: inject.c.s
+
+.PHONY : inject.s
+
+# target to generate assembly for a file
+inject.c.s:
+	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/inject.c.s
+.PHONY : inject.c.s
+
 listx.o: listx.c.o
 
 .PHONY : listx.o
@@ -216,6 +243,9 @@ help:
 	@echo "... elfx.o"
 	@echo "... elfx.i"
 	@echo "... elfx.s"
+	@echo "... inject.o"
+	@echo "... inject.i"
+	@echo "... inject.s"
 	@echo "... listx.o"
 	@echo "... listx.i"
 	@echo "... listx.s"
