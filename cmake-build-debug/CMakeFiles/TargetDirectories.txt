@@ -1,3 +1,6 @@
-/home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles/libx.dir
+/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles/worm.dir
+/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles/worm_s.dir
+/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles/test_data_infect.dir
+/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles/test_utils.dir

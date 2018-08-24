@@ -48,10 +48,10 @@ RM = /home/ulexec/Documents/clion-2018.2/bin/cmake/linux/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ulexec/Documents/ELF-REsearch/libx
+CMAKE_SOURCE_DIR = /home/ulexec/Documents/ELF-REsearch/libworm
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug
+CMAKE_BINARY_DIR = /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles /home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,125 +111,200 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named libx
+# Target rules for targets named worm
 
 # Build rule for target.
-libx: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 libx
-.PHONY : libx
+worm: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 worm
+.PHONY : worm
 
 # fast build rule for target.
-libx/fast:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/build
-.PHONY : libx/fast
+worm/fast:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/build
+.PHONY : worm/fast
 
-elfx.o: elfx.c.o
+#=============================================================================
+# Target rules for targets named worm_s
 
-.PHONY : elfx.o
+# Build rule for target.
+worm_s: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 worm_s
+.PHONY : worm_s
 
-# target to build an object file
-elfx.c.o:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/elfx.c.o
-.PHONY : elfx.c.o
+# fast build rule for target.
+worm_s/fast:
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/build
+.PHONY : worm_s/fast
 
-elfx.i: elfx.c.i
+#=============================================================================
+# Target rules for targets named test_data_infect
 
-.PHONY : elfx.i
+# Build rule for target.
+test_data_infect: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_data_infect
+.PHONY : test_data_infect
 
-# target to preprocess a source file
-elfx.c.i:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/elfx.c.i
-.PHONY : elfx.c.i
+# fast build rule for target.
+test_data_infect/fast:
+	$(MAKE) -f CMakeFiles/test_data_infect.dir/build.make CMakeFiles/test_data_infect.dir/build
+.PHONY : test_data_infect/fast
 
-elfx.s: elfx.c.s
+#=============================================================================
+# Target rules for targets named test_utils
 
-.PHONY : elfx.s
+# Build rule for target.
+test_utils: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_utils
+.PHONY : test_utils
 
-# target to generate assembly for a file
-elfx.c.s:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/elfx.c.s
-.PHONY : elfx.c.s
+# fast build rule for target.
+test_utils/fast:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/build
+.PHONY : test_utils/fast
 
-inject.o: inject.c.o
+elfw.o: elfw.c.o
 
-.PHONY : inject.o
-
-# target to build an object file
-inject.c.o:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/inject.c.o
-.PHONY : inject.c.o
-
-inject.i: inject.c.i
-
-.PHONY : inject.i
-
-# target to preprocess a source file
-inject.c.i:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/inject.c.i
-.PHONY : inject.c.i
-
-inject.s: inject.c.s
-
-.PHONY : inject.s
-
-# target to generate assembly for a file
-inject.c.s:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/inject.c.s
-.PHONY : inject.c.s
-
-listx.o: listx.c.o
-
-.PHONY : listx.o
+.PHONY : elfw.o
 
 # target to build an object file
-listx.c.o:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/listx.c.o
-.PHONY : listx.c.o
+elfw.c.o:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/elfw.c.o
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/elfw.c.o
+.PHONY : elfw.c.o
 
-listx.i: listx.c.i
+elfw.i: elfw.c.i
 
-.PHONY : listx.i
+.PHONY : elfw.i
 
 # target to preprocess a source file
-listx.c.i:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/listx.c.i
-.PHONY : listx.c.i
+elfw.c.i:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/elfw.c.i
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/elfw.c.i
+.PHONY : elfw.c.i
 
-listx.s: listx.c.s
+elfw.s: elfw.c.s
 
-.PHONY : listx.s
+.PHONY : elfw.s
 
 # target to generate assembly for a file
-listx.c.s:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/listx.c.s
-.PHONY : listx.c.s
+elfw.c.s:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/elfw.c.s
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/elfw.c.s
+.PHONY : elfw.c.s
 
-main.o: main.c.o
+injectw.o: injectw.c.o
 
-.PHONY : main.o
+.PHONY : injectw.o
 
 # target to build an object file
-main.c.o:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/main.c.o
-.PHONY : main.c.o
+injectw.c.o:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/injectw.c.o
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/injectw.c.o
+.PHONY : injectw.c.o
 
-main.i: main.c.i
+injectw.i: injectw.c.i
 
-.PHONY : main.i
+.PHONY : injectw.i
 
 # target to preprocess a source file
-main.c.i:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/main.c.i
-.PHONY : main.c.i
+injectw.c.i:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/injectw.c.i
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/injectw.c.i
+.PHONY : injectw.c.i
 
-main.s: main.c.s
+injectw.s: injectw.c.s
 
-.PHONY : main.s
+.PHONY : injectw.s
 
 # target to generate assembly for a file
-main.c.s:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/main.c.s
-.PHONY : main.c.s
+injectw.c.s:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/injectw.c.s
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/injectw.c.s
+.PHONY : injectw.c.s
+
+listw.o: listw.c.o
+
+.PHONY : listw.o
+
+# target to build an object file
+listw.c.o:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/listw.c.o
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/listw.c.o
+.PHONY : listw.c.o
+
+listw.i: listw.c.i
+
+.PHONY : listw.i
+
+# target to preprocess a source file
+listw.c.i:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/listw.c.i
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/listw.c.i
+.PHONY : listw.c.i
+
+listw.s: listw.c.s
+
+.PHONY : listw.s
+
+# target to generate assembly for a file
+listw.c.s:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/listw.c.s
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/listw.c.s
+.PHONY : listw.c.s
+
+tests/test_data_infect.o: tests/test_data_infect.c.o
+
+.PHONY : tests/test_data_infect.o
+
+# target to build an object file
+tests/test_data_infect.c.o:
+	$(MAKE) -f CMakeFiles/test_data_infect.dir/build.make CMakeFiles/test_data_infect.dir/tests/test_data_infect.c.o
+.PHONY : tests/test_data_infect.c.o
+
+tests/test_data_infect.i: tests/test_data_infect.c.i
+
+.PHONY : tests/test_data_infect.i
+
+# target to preprocess a source file
+tests/test_data_infect.c.i:
+	$(MAKE) -f CMakeFiles/test_data_infect.dir/build.make CMakeFiles/test_data_infect.dir/tests/test_data_infect.c.i
+.PHONY : tests/test_data_infect.c.i
+
+tests/test_data_infect.s: tests/test_data_infect.c.s
+
+.PHONY : tests/test_data_infect.s
+
+# target to generate assembly for a file
+tests/test_data_infect.c.s:
+	$(MAKE) -f CMakeFiles/test_data_infect.dir/build.make CMakeFiles/test_data_infect.dir/tests/test_data_infect.c.s
+.PHONY : tests/test_data_infect.c.s
+
+tests/test_utils.o: tests/test_utils.c.o
+
+.PHONY : tests/test_utils.o
+
+# target to build an object file
+tests/test_utils.c.o:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/tests/test_utils.c.o
+.PHONY : tests/test_utils.c.o
+
+tests/test_utils.i: tests/test_utils.c.i
+
+.PHONY : tests/test_utils.i
+
+# target to preprocess a source file
+tests/test_utils.c.i:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/tests/test_utils.c.i
+.PHONY : tests/test_utils.c.i
+
+tests/test_utils.s: tests/test_utils.c.s
+
+.PHONY : tests/test_utils.s
+
+# target to generate assembly for a file
+tests/test_utils.c.s:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/tests/test_utils.c.s
+.PHONY : tests/test_utils.c.s
 
 # Help Target
 help:
@@ -239,19 +314,25 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... libx"
-	@echo "... elfx.o"
-	@echo "... elfx.i"
-	@echo "... elfx.s"
-	@echo "... inject.o"
-	@echo "... inject.i"
-	@echo "... inject.s"
-	@echo "... listx.o"
-	@echo "... listx.i"
-	@echo "... listx.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... worm"
+	@echo "... worm_s"
+	@echo "... test_data_infect"
+	@echo "... test_utils"
+	@echo "... elfw.o"
+	@echo "... elfw.i"
+	@echo "... elfw.s"
+	@echo "... injectw.o"
+	@echo "... injectw.i"
+	@echo "... injectw.s"
+	@echo "... listw.o"
+	@echo "... listw.i"
+	@echo "... listw.s"
+	@echo "... tests/test_data_infect.o"
+	@echo "... tests/test_data_infect.i"
+	@echo "... tests/test_data_infect.s"
+	@echo "... tests/test_utils.o"
+	@echo "... tests/test_utils.i"
+	@echo "... tests/test_utils.s"
 .PHONY : help
 
 

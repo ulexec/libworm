@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/test_data_infect.dir/tests/test_data_infect.c.o  -o tests/test_data_infect  -L/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/lib -Wl,-rpath,/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/lib -lworm 

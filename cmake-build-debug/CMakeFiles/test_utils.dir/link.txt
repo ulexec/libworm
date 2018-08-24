@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/test_utils.dir/tests/test_utils.c.o  -o tests/test_utils  -L/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/lib -Wl,-rpath,/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/lib -lworm 

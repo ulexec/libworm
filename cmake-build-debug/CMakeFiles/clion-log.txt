@@ -1,4 +1,4 @@
-/home/ulexec/Documents/clion-2018.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/ulexec/Documents/ELF-REsearch/libx
+/home/ulexec/Documents/clion-2018.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/ulexec/Documents/ELF-REsearch/libworm
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug
+-- Build files have been written to: /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug

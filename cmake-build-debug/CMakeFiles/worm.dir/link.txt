@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -g  -shared -Wl,-soname,libworm.so -o lib/libworm.so CMakeFiles/worm.dir/elfw.c.o CMakeFiles/worm.dir/injectw.c.o CMakeFiles/worm.dir/listw.c.o 

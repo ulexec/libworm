@@ -59,45 +59,156 @@ RM = /home/ulexec/Documents/clion-2018.2/bin/cmake/linux/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ulexec/Documents/ELF-REsearch/libx
+CMAKE_SOURCE_DIR = /home/ulexec/Documents/ELF-REsearch/libworm
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug
+CMAKE_BINARY_DIR = /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug
 
 #=============================================================================
-# Target rules for target CMakeFiles/libx.dir
+# Target rules for target CMakeFiles/worm.dir
 
 # All Build rule for target.
-CMakeFiles/libx.dir/all:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/depend
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5 "Built target libx"
-.PHONY : CMakeFiles/libx.dir/all
+CMakeFiles/worm.dir/all:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/depend
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles --progress-num=5,6,7,8 "Built target worm"
+.PHONY : CMakeFiles/worm.dir/all
 
 # Include target in all.
-all: CMakeFiles/libx.dir/all
+all: CMakeFiles/worm.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/libx.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles 5
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/libx.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libx/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/libx.dir/rule
+CMakeFiles/worm.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/worm.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/worm.dir/rule
 
 # Convenience name for target.
-libx: CMakeFiles/libx.dir/rule
+worm: CMakeFiles/worm.dir/rule
 
-.PHONY : libx
-
-# clean rule for target.
-CMakeFiles/libx.dir/clean:
-	$(MAKE) -f CMakeFiles/libx.dir/build.make CMakeFiles/libx.dir/clean
-.PHONY : CMakeFiles/libx.dir/clean
+.PHONY : worm
 
 # clean rule for target.
-clean: CMakeFiles/libx.dir/clean
+CMakeFiles/worm.dir/clean:
+	$(MAKE) -f CMakeFiles/worm.dir/build.make CMakeFiles/worm.dir/clean
+.PHONY : CMakeFiles/worm.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/worm.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/worm_s.dir
+
+# All Build rule for target.
+CMakeFiles/worm_s.dir/all:
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/depend
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles --progress-num=9,10,11,12 "Built target worm_s"
+.PHONY : CMakeFiles/worm_s.dir/all
+
+# Include target in all.
+all: CMakeFiles/worm_s.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/worm_s.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/worm_s.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/worm_s.dir/rule
+
+# Convenience name for target.
+worm_s: CMakeFiles/worm_s.dir/rule
+
+.PHONY : worm_s
+
+# clean rule for target.
+CMakeFiles/worm_s.dir/clean:
+	$(MAKE) -f CMakeFiles/worm_s.dir/build.make CMakeFiles/worm_s.dir/clean
+.PHONY : CMakeFiles/worm_s.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/worm_s.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_data_infect.dir
+
+# All Build rule for target.
+CMakeFiles/test_data_infect.dir/all:
+	$(MAKE) -f CMakeFiles/test_data_infect.dir/build.make CMakeFiles/test_data_infect.dir/depend
+	$(MAKE) -f CMakeFiles/test_data_infect.dir/build.make CMakeFiles/test_data_infect.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target test_data_infect"
+.PHONY : CMakeFiles/test_data_infect.dir/all
+
+# Include target in all.
+all: CMakeFiles/test_data_infect.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_data_infect.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test_data_infect.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/test_data_infect.dir/rule
+
+# Convenience name for target.
+test_data_infect: CMakeFiles/test_data_infect.dir/rule
+
+.PHONY : test_data_infect
+
+# clean rule for target.
+CMakeFiles/test_data_infect.dir/clean:
+	$(MAKE) -f CMakeFiles/test_data_infect.dir/build.make CMakeFiles/test_data_infect.dir/clean
+.PHONY : CMakeFiles/test_data_infect.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/test_data_infect.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/test_utils.dir
+
+# All Build rule for target.
+CMakeFiles/test_utils.dir/all:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/depend
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles --progress-num=3,4 "Built target test_utils"
+.PHONY : CMakeFiles/test_utils.dir/all
+
+# Include target in all.
+all: CMakeFiles/test_utils.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_utils.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test_utils.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/test_utils.dir/rule
+
+# Convenience name for target.
+test_utils: CMakeFiles/test_utils.dir/rule
+
+.PHONY : test_utils
+
+# clean rule for target.
+CMakeFiles/test_utils.dir/clean:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/clean
+.PHONY : CMakeFiles/test_utils.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/test_utils.dir/clean
 
 .PHONY : clean
 

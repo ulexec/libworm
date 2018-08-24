@@ -1,0 +1,2 @@
+/usr/bin/ar qc lib/libworm_s.a  CMakeFiles/worm_s.dir/elfw.c.o CMakeFiles/worm_s.dir/injectw.c.o CMakeFiles/worm_s.dir/listw.c.o
+/usr/bin/ranlib lib/libworm_s.a
