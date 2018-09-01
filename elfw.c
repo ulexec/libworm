@@ -308,7 +308,7 @@ int resolve_plt(Elfw_Bin *bin) {
 
     while(true) {
         int offset;
-        /*cheking that the plt_addr points to the plt firsts entry*/
+        /*cheking that the plt_addr points to the plt first entry*/
         if(addr_to_offset(bin, bin->plt_addr, &offset) == LIBWORM_ERROR) {
             fprintf(stderr, "Error parsing plt");
             return LIBWORM_ERROR;
