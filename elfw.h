@@ -162,6 +162,7 @@ int addr_to_offset(Elfw_Bin *, int, int*);
 int offset_to_addr(Elfw_Bin *, int, int*);
 int addr_to_rva(Elfw_Bin *, uintptr_t);
 int rva_to_addr(Elfw_Bin *, int);
+int is_code_address(Elfw_Bin *, int);
 
 
 #endif //LIBWORM_ELFX_H

@@ -283,6 +283,13 @@ int resolve_pltgot(Elfw_Bin *bin) {
     return LIBWORM_SUCCESS;
 }
 
+int is_code_address(Elfw_Bin *bin, int address) {
+    if(bin->code_phdr->p_vaddr <= address && address <= bin->code_phdr->p_vaddr + bin->code_phdr->p_filesz) {
+        return LIBWORM_SUCCESS;
+    }
+    return LIBWORM_ERROR;
+}
+
 int resolve_plt(Elfw_Bin *bin) {
     PtrW(uint) plt_entry;
     Elfw_Ptr *got_entry;
@@ -291,13 +298,7 @@ int resolve_plt(Elfw_Bin *bin) {
 
     BIN_ITER_GOTPLT(iter, bin) {
         got_entry = GET_LIST_ENTRY(iter, Elfw_Ptr);
-        if (i++ == 1) {
-            if ((*got_entry->data & 0xf) == 0x6) {
-                bin->plt_addr = ((*got_entry->data >> 4) << 4) - 0x10;
-                break;
-            }
-        }
-        if (i++ == PLTGOTLDENT) {
+        if (is_code_address(bin, *got_entry->data) == LIBWORM_SUCCESS) {
             bin->plt_addr = ((*got_entry->data >> 4) << 4) - 0x10;
             break;
         }
