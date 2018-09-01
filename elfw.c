@@ -291,6 +291,12 @@ int resolve_plt(Elfw_Bin *bin) {
 
     BIN_ITER_GOTPLT(iter, bin) {
         got_entry = GET_LIST_ENTRY(iter, Elfw_Ptr);
+        if (i++ == 1) {
+            if ((*got_entry->data & 0xf) == 0x6) {
+                bin->plt_addr = ((*got_entry->data >> 4) << 4) - 0x10;
+                break;
+            }
+        }
         if (i++ == PLTGOTLDENT) {
             bin->plt_addr = ((*got_entry->data >> 4) << 4) - 0x10;
             break;
@@ -298,6 +304,21 @@ int resolve_plt(Elfw_Bin *bin) {
     }
     if (addr_to_offset(bin, bin->plt_addr, (int *) &plt_entry) == LIBWORM_ERROR){
         return LIBWORM_ERROR;
+    }
+
+    while(true) {
+        int offset;
+        /*cheking that the plt_addr points to the plt firsts entry*/
+        if(addr_to_offset(bin, bin->plt_addr, &offset) == LIBWORM_ERROR) {
+            fprintf(stderr, "Error parsing plt");
+            return LIBWORM_ERROR;
+        }
+
+        if (*(uint16_t *)&bin->data[offset] != 0x35ff) {
+            bin->plt_addr += 2;
+        } else {
+            break;
+        }
     }
 
     init_list_head(&bin->plt.list);

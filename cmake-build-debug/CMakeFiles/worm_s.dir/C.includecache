@@ -34,25 +34,11 @@ listw.h
 limits.h
 -
 
-/home/ulexec/Documents/ELF-REsearch/libworm/injectw.c
-worm.h
-/home/ulexec/Documents/ELF-REsearch/libworm/worm.h
-sys/mman.h
--
-stdbool.h
--
-string.h
--
-
 /home/ulexec/Documents/ELF-REsearch/libworm/injectw.h
 elfw.h
 /home/ulexec/Documents/ELF-REsearch/libworm/elfw.h
 stdbool.h
 -
-
-/home/ulexec/Documents/ELF-REsearch/libworm/listw.c
-worm.h
-/home/ulexec/Documents/ELF-REsearch/libworm/worm.h
 
 /home/ulexec/Documents/ELF-REsearch/libworm/listw.h
 stddef.h

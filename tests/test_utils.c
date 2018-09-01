@@ -4,17 +4,19 @@ int main(int argc, char **argv) {
     Elfw_Bin *bin;
     struct list_head *iter;
 
-    if (bin_load_elf (&bin, "/home/ulexec/Desktop/ls", PROT_READ | PROT_WRITE, MAP_PRIVATE) == LIBWORM_ERROR) {
+    if (bin_load_elf (&bin, "/bin/ls", PROT_READ | PROT_WRITE, MAP_PRIVATE) == LIBWORM_ERROR) {
         fprintf (stderr, "bin_load_elf failed");
         return LIBWORM_ERROR;
     }
 
     /* Iterate through program headers */
+    printf("Segments:\n");
     BIN_ITER_PHDRS(iter, bin) {
         Elfw_Phdr *phdr = GET_LIST_ENTRY (iter, Elfw_Phdr);
         printf ("0x%lx\n" , phdr->data->p_paddr);
     }
     /*Iterate through section headers*/
+    printf("Sections:\n");
     BIN_ITER_SHDRS(iter, bin) {
         char *section_name;
         Elfw_Shdr *shdr = GET_LIST_ENTRY (iter, Elfw_Shdr);
@@ -23,6 +25,7 @@ int main(int argc, char **argv) {
         }
     }
     /*Iterate through symtab symbols*/
+    printf("Symbols:\n");
     BIN_ITER_SYMBOLS(iter, bin) {
         char *symbol_name;
         Elfw_Sym *sym = GET_LIST_ENTRY (iter, Elfw_Sym);
@@ -31,6 +34,7 @@ int main(int argc, char **argv) {
         }
     }
     /*Iterate through dynsym symbols*/
+    printf("Dynamic Symbols:\n");
     BIN_ITER_DYNAMIC_SYMBOLS(iter, bin) {
         char *symbol_name;
         Elfw_Sym *sym = GET_LIST_ENTRY (iter, Elfw_Sym);
@@ -40,21 +44,25 @@ int main(int argc, char **argv) {
 
     }
     /*Iterate through dynamic entries*/
+    printf("Dynamic:\n");
     BIN_ITER_DYNAMIC(iter, bin) {
         Elfw_Dyn *dyn = GET_LIST_ENTRY (iter, Elfw_Dyn);
         printf ("0x%lx\n", dyn->data->d_un.d_ptr);
     }
     /*Iterate through relocations*/
+    printf("Relocations:\n");
     BIN_ITER_RELOCS(iter, bin) {
         Elfw_Rel *rel = GET_LIST_ENTRY(iter, Elfw_Rel);
         printf ("0x%lx\n", rel->data->r_offset);
     }
     /*Iterate through .got.plt section entries*/
+    printf("GotPlt:\n");
     BIN_ITER_GOTPLT(iter, bin) {
         Elfw_Ptr *ptr = GET_LIST_ENTRY(iter, Elfw_Ptr);
         printf ("0x%lx\n", *ptr->data);
     }
     /*Iterate through .plt section entries*/
+    printf("Plt:\n");
     BIN_ITER_PLT(iter, bin) {
         Elfw_Plt *plt = GET_LIST_ENTRY(iter, Elfw_Plt);
         printf ("%p\n", plt->addr);

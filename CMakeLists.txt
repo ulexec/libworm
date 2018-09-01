@@ -17,14 +17,19 @@ set_target_properties(worm
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
         )
 
-# --- Tests building ----
+# --- Tests builds ----
 link_directories(cmake-build-debug/lib)
+
 add_executable(test_data_infect tests/test_data_infect.c)
 target_link_libraries(test_data_infect libworm.so)
+
 add_executable(test_utils tests/test_utils.c)
 target_link_libraries(test_utils libworm.so)
 
-set_target_properties(test_data_infect test_utils
+add_executable(test_text_infect tests/test_text_infect.c)
+target_link_libraries(test_text_infect libworm.so)
+
+set_target_properties(test_data_infect test_utils test_text_infect
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
         )

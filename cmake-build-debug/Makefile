@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named test_text_infect
+
+# Build rule for target.
+test_text_infect: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_text_infect
+.PHONY : test_text_infect
+
+# fast build rule for target.
+test_text_infect/fast:
+	$(MAKE) -f CMakeFiles/test_text_infect.dir/build.make CMakeFiles/test_text_infect.dir/build
+.PHONY : test_text_infect/fast
+
+#=============================================================================
 # Target rules for targets named worm
 
 # Build rule for target.
@@ -279,6 +292,33 @@ tests/test_data_infect.c.s:
 	$(MAKE) -f CMakeFiles/test_data_infect.dir/build.make CMakeFiles/test_data_infect.dir/tests/test_data_infect.c.s
 .PHONY : tests/test_data_infect.c.s
 
+tests/test_text_infect.o: tests/test_text_infect.c.o
+
+.PHONY : tests/test_text_infect.o
+
+# target to build an object file
+tests/test_text_infect.c.o:
+	$(MAKE) -f CMakeFiles/test_text_infect.dir/build.make CMakeFiles/test_text_infect.dir/tests/test_text_infect.c.o
+.PHONY : tests/test_text_infect.c.o
+
+tests/test_text_infect.i: tests/test_text_infect.c.i
+
+.PHONY : tests/test_text_infect.i
+
+# target to preprocess a source file
+tests/test_text_infect.c.i:
+	$(MAKE) -f CMakeFiles/test_text_infect.dir/build.make CMakeFiles/test_text_infect.dir/tests/test_text_infect.c.i
+.PHONY : tests/test_text_infect.c.i
+
+tests/test_text_infect.s: tests/test_text_infect.c.s
+
+.PHONY : tests/test_text_infect.s
+
+# target to generate assembly for a file
+tests/test_text_infect.c.s:
+	$(MAKE) -f CMakeFiles/test_text_infect.dir/build.make CMakeFiles/test_text_infect.dir/tests/test_text_infect.c.s
+.PHONY : tests/test_text_infect.c.s
+
 tests/test_utils.o: tests/test_utils.c.o
 
 .PHONY : tests/test_utils.o
@@ -314,6 +354,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... test_text_infect"
 	@echo "... worm"
 	@echo "... worm_s"
 	@echo "... test_data_infect"
@@ -330,6 +371,9 @@ help:
 	@echo "... tests/test_data_infect.o"
 	@echo "... tests/test_data_infect.i"
 	@echo "... tests/test_data_infect.s"
+	@echo "... tests/test_text_infect.o"
+	@echo "... tests/test_text_infect.i"
+	@echo "... tests/test_text_infect.s"
 	@echo "... tests/test_utils.o"
 	@echo "... tests/test_utils.i"
 	@echo "... tests/test_utils.s"

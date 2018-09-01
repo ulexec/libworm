@@ -37,6 +37,46 @@
 					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="test_text_infect">
+				<Option output="/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/tests/test_text_infect" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_text_infect"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_text_infect/fast">
+				<Option output="/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/tests/test_text_infect" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_text_infect/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="worm">
 				<Option output="/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug/lib/libworm.so" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/ulexec/Documents/ELF-REsearch/libworm/cmake-build-debug"/>
@@ -224,6 +264,9 @@
 		</Unit>
 		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libworm/tests/test_data_infect.c">
 			<Option target="test_data_infect"/>
+		</Unit>
+		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libworm/tests/test_text_infect.c">
+			<Option target="test_text_infect"/>
 		</Unit>
 		<Unit filename="/home/ulexec/Documents/ELF-REsearch/libworm/tests/test_utils.c">
 			<Option target="test_utils"/>

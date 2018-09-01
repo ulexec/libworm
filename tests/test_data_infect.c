@@ -48,4 +48,5 @@ int main() {
     bin_unload_elf(infected_bin);
     bin_unload_elf(bin);
     free(code);
+    return 0;
 }

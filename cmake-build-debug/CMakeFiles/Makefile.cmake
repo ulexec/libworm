@@ -42,6 +42,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
+  "CMakeFiles/test_text_infect.dir/DependInfo.cmake"
   "CMakeFiles/worm.dir/DependInfo.cmake"
   "CMakeFiles/worm_s.dir/DependInfo.cmake"
   "CMakeFiles/test_data_infect.dir/DependInfo.cmake"

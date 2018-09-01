@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/ulexec/Documents/ELF-REsearch/libworm/elfw.c
-worm.h
-/home/ulexec/Documents/ELF-REsearch/libworm/worm.h
-
 /home/ulexec/Documents/ELF-REsearch/libworm/elfw.h
 elf.h
 -
@@ -42,6 +38,12 @@ stdbool.h
 
 /home/ulexec/Documents/ELF-REsearch/libworm/listw.h
 stddef.h
+-
+
+/home/ulexec/Documents/ELF-REsearch/libworm/tests/test_text_infect.c
+../worm.h
+/home/ulexec/Documents/ELF-REsearch/libworm/worm.h
+stdbool.h
 -
 
 /home/ulexec/Documents/ELF-REsearch/libworm/worm.h
